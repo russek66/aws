@@ -1,0 +1,25 @@
+{
+    "name" : "russek66/php-web",
+    "description" : "description",
+    "minimum-stability" : "stable",
+    "license" : "proprietary",
+    "authors" : [
+        {
+            "name" : "russek66",
+            "email" : "russek66@gmail.com"
+        }
+    ],
+    "require" : {
+        "php": ">=8.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "App\\Tests\\": "tests/"
+        }
+    }
+}
