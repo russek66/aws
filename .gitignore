@@ -1,3 +1,4 @@
 old/
 .idea/
 vendor/
+config/config.local.php
