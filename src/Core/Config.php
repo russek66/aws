@@ -4,16 +4,18 @@ namespace App\Core;
 
 class Config
 {
-    public static mixed $config;
+    public static mixed $config = null;
 
     public static function get($key)
     {
         if (!self::$config) {
 
-            $configFile = '../application/config/config.' . Environment::get() . '.php';
+            $configFile = '../config/config.' . Environment::get() . '.php';
 
             if (!file_exists($configFile)) {
                 return false;
+
+                //TO DO -> Throw error, log it and show Error page
             }
 
             self::$config = require $configFile;

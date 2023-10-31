@@ -7,6 +7,6 @@ class ErrorView
 
     public function renderError(string $error):void
     {
-        require Config::get(key: 'PATH_VIEW') . 'error/' . $error . '.php';
+        require Config::get(key: 'ERROR_PATH_VIEW') .  $error . '.php';
     }
 }
