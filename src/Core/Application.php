@@ -2,18 +2,19 @@
 
 declare(strict_types=1);
 
-use App\Http\Controllers\ErrorController;
+namespace App\Core;
+
+use App\{Http\Controllers\ErrorController};
 
 class Application
 {
-    public function __construct(
-        private ?string $controllerName,
-        private ?string $actionName,
-        private mixed $parameters,
-        private mixed $controller
-    )
+    private ?string $controllerName;
+    private ?string $actionName;
+    private mixed $parameters;
+    private mixed $controller;
+    public function __construct()
     {
-        $url = trim(Request::get('url'), '/');
+        $url = trim(Request::get(key: 'url'), '/');
         $url = filter_var($url, FILTER_SANITIZE_URL);
         $url = explode('/', $url);
 
@@ -24,11 +25,11 @@ class Application
         $this->parameters = array_values($url);
         $this->controllerName = ucwords($this->controllerName) . 'Controller';
 
-        if(file_exists(Config::get('PATH_CONTROLLER') . $this->controllerName . '.php')) {
-            require Config::get('PATH_CONTROLLER') . $this->controllerName . '.php';
+        if(file_exists(Config::get(key: 'PATH_CONTROLLER') . $this->controllerName . '.php')) {
+            require Config::get(key: 'PATH_CONTROLLER') . $this->controllerName . '.php';
             $this->controller = new $this->controllerName;
         } else {
-            (new ErrorController)->error404();
+            (new ErrorController)->basicError();
         }
     }
 }

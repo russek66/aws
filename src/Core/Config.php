@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Core;
+
 class Config
 {
     public static mixed $config;

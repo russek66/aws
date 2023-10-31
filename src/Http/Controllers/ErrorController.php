@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-class ErrorController
+use App\Core\ErrorView;
+
+class ErrorController extends Controller
 {
-
-    public function error404()
+    public function basicError():void
     {
-
+        (new ErrorView())->renderError(error: '404');
     }
 }
