@@ -2,6 +2,8 @@
 
 namespace App\Core;
 
+use App\Http\Controllers\ErrorController;
+
 class Config
 {
     public static mixed $config = null;
@@ -13,9 +15,7 @@ class Config
             $configFile = '../config/config.' . Environment::get() . '.php';
 
             if (!file_exists($configFile)) {
-                return false;
-
-                //TO DO -> Throw error, log it and show Error page
+                (new ErrorController)->fatalError(message: 'FATAL_ERROR_PAGE_NOT_FOUND', errorPage: '404');
             }
 
             self::$config = require $configFile;

@@ -29,7 +29,7 @@ class Application
             require Config::get(key: 'PATH_CONTROLLER') . $this->controllerName . '.php';
             $this->controller = new $this->controllerName;
         } else {
-            (new ErrorController)->basicError();
+            (new ErrorController)->fatalError(message: 'FATAL_ERROR_PAGE_NOT_FOUND', errorPage: '404');
         }
     }
 }
