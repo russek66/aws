@@ -18,8 +18,8 @@ class Application
         $url = filter_var($url, FILTER_SANITIZE_URL);
         $url = explode('/', $url);
 
-        $this->controllerName = $url[0] ?? null;
-        $this->actionName = $url[1] ?? null;
+        $this->controllerName = $url[0] ?? 'index';
+        $this->actionName = $url[1] ?? 'index';
 
         unset($url[0], $url[1]);
         $this->parameters = array_values($url);
@@ -28,6 +28,16 @@ class Application
         if(file_exists(Config::get(key: 'PATH_CONTROLLER') . $this->controllerName . '.php')) {
             require Config::get(key: 'PATH_CONTROLLER') . $this->controllerName . '.php';
             $this->controller = new $this->controllerName;
+            if (is_callable(array($this->controller, $this->actionName))) {
+                if (!empty($this->parameters)) {
+                    //call_user_func_array(array($this->controller, $this->actionName), $this->parameters);
+                    $this->controller->actionName(...$this->parameters);
+                } else {
+                    $this->controller->{$this->actionName}();
+                }
+            } else {
+                (new ErrorController)->fatalError(message: 'FATAL_ERROR_PAGE_NOT_FOUND', errorPage: '404');
+            }
         } else {
             (new ErrorController)->fatalError(message: 'FATAL_ERROR_PAGE_NOT_FOUND', errorPage: '404');
         }

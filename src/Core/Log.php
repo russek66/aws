@@ -7,7 +7,7 @@ use Monolog\Logger;
 
 class Log {
 
-    protected static Logger $instance;
+    protected static ?Logger $instance = null;
 
     static public function getLogger():Logger
     {
@@ -19,7 +19,7 @@ class Log {
 
     protected static function configureInstance():Logger
     {
-        $dir = Config::get(key: 'PATH_CONTROLLER');
+        $dir = Config::get(key: 'LOG_PATH');
         $logger = new Logger('APP_LOGGER');
         $logger->pushHandler(new RotatingFileHandler($dir . 'main.log', 5));
         return self::$instance = $logger;
