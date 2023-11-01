@@ -7,6 +7,9 @@ use App\Core\Log;
 
 class ErrorController extends Controller
 {
+    public function __construct(){
+        parent::__construct();
+    }
     public function basicError(string $message):void
     {
         (new ErrorView())->renderError(error: $message);

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Core;
 
-use App\{Http\Controllers\ErrorController};
+use App\Http\Controllers\ErrorController;
 
 class Application
 {
@@ -12,6 +12,7 @@ class Application
     private ?string $actionName;
     private mixed $parameters;
     private mixed $controller;
+
     public function __construct()
     {
         $url = trim(Request::get(key: 'url'), '/');
@@ -23,15 +24,13 @@ class Application
 
         unset($url[0], $url[1]);
         $this->parameters = array_values($url);
-        $this->controllerName = ucwords($this->controllerName) . 'Controller';
-
+        $this->controllerName = ucwords($this->controllerName) . 'Controller';;
         if(file_exists(Config::get(key: 'PATH_CONTROLLER') . $this->controllerName . '.php')) {
-            require Config::get(key: 'PATH_CONTROLLER') . $this->controllerName . '.php';
-            $this->controller = new $this->controllerName;
+            require Config::get('PATH_CONTROLLER') . $this->controllerName . '.php';
+            $this->controller = new $this->controllerName();
             if (is_callable(array($this->controller, $this->actionName))) {
                 if (!empty($this->parameters)) {
-                    //call_user_func_array(array($this->controller, $this->actionName), $this->parameters);
-                    $this->controller->actionName(...$this->parameters);
+                    $this->controller->{$this->actionName}(...$this->parameters);
                 } else {
                     $this->controller->{$this->actionName}();
                 }
