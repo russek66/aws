@@ -7,69 +7,53 @@ use Monolog\Logger;
 
 class Log {
 
-    protected static $instance;
+    protected static Logger $instance;
 
-    /**
-     * Method to return the Monolog instance
-     *
-     * @return \Monolog\Logger
-     */
-    static public function getLogger()
+    static public function getLogger():Logger
     {
         if (! self::$instance) {
             self::configureInstance();
         }
-
         return self::$instance;
     }
 
-    /**
-     * Configure Monolog to use a rotating files system.
-     *
-     * @return Logger
-     */
-    protected static function configureInstance()
+    protected static function configureInstance():Logger
     {
-        $dir = dirname(__DIR__) . DIRECTORY_SEPARATOR . 'log';
-
-        if (!file_exists($dir)){
-            mkdir($dir, 0777, true);
-        }
-
+        $dir = Config::get(key: 'PATH_CONTROLLER');
         $logger = new Logger('APP_LOGGER');
-        $logger->pushHandler(new RotatingFileHandler($dir . DIRECTORY_SEPARATOR . 'main.log', 5));
-        self::$instance = $logger;
+        $logger->pushHandler(new RotatingFileHandler($dir . 'main.log', 5));
+        return self::$instance = $logger;
     }
 
-    public static function debug($message, array $context = []){
+    public static function debug($message, array $context = []):void{
         self::getLogger()->debug($message, $context);
     }
 
-    public static function info($message, array $context = []){
+    public static function info($message, array $context = []):void{
         self::getLogger()->info($message, $context);
     }
 
-    public static function notice($message, array $context = []){
+    public static function notice($message, array $context = []):void{
         self::getLogger()->notice($message, $context);
     }
 
-    public static function warning($message, array $context = []){
+    public static function warning($message, array $context = []):void{
         self::getLogger()->warning($message, $context);
     }
 
-    public static function error($message, array $context = []){
+    public static function error($message, array $context = []):void{
         self::getLogger()->error($message, $context);
     }
 
-    public static function critical($message, array $context = []){
+    public static function critical($message, array $context = []):void{
         self::getLogger()->critical($message, $context);
     }
 
-    public static function alert($message, array $context = []){
+    public static function alert($message, array $context = []):void{
         self::getLogger()->alert($message, $context);
     }
 
-    public static function emergency($message, array $context = []){
+    public static function emergency($message, array $context = []):void{
         self::getLogger()->emergency($message, $context);
     }
 

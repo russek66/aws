@@ -9,12 +9,13 @@ class ErrorController extends Controller
 {
     public function basicError(string $message):void
     {
-        (new ErrorView())->renderError(error: '404');
+        (new ErrorView())->renderError(error: $message);
+        Log::info($message, ['extra' => 'information', 'about' => 'anything' ]);
     }
 
     public function fatalError(string $message, string $errorPage):void
     {
         (new ErrorView())->renderFatalError(error: $errorPage);
-        Log::info($message, ['extra' => 'information', 'about' => 'anything' ]);
+        Log::error($message, ['extra' => 'information', 'about' => 'anything' ]);
     }
 }
