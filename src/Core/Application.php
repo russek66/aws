@@ -24,6 +24,7 @@ class Application
 
         unset($url[0], $url[1]);
         $this->parameters = array_values($url);
+
         $this->controllerName = ucwords($this->controllerName) . 'Controller';;
         if(file_exists(Config::get(key: 'PATH_CONTROLLER') . $this->controllerName . '.php')) {
             require Config::get('PATH_CONTROLLER') . $this->controllerName . '.php';

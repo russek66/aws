@@ -9,6 +9,6 @@ class Request
         if (isset($_GET[$key])) {
             return $_GET[$key];
         }
-        return "index/index";
+        return "index/showIndex/42";
     }
 }
