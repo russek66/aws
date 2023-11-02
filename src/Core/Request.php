@@ -5,10 +5,14 @@ namespace App\Core;
 class Request
 {
 
-    public static function get(mixed $key): mixed{
+    public static function get(mixed $key):mixed {
         if (isset($_GET[$key])) {
             return $_GET[$key];
         }
-        return "index/showIndex/42";
+        return "login/index";
+    }
+
+    public static function post(mixed $key):void {
+
     }
 }

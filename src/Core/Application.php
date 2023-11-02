@@ -13,8 +13,7 @@ class Application
     private mixed $parameters;
     private mixed $controller;
 
-    public function __construct()
-    {
+    public function __construct() {
         $url = trim(Request::get(key: 'url'), '/');
         $url = filter_var($url, FILTER_SANITIZE_URL);
         $url = explode('/', $url);

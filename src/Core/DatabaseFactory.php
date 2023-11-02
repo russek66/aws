@@ -9,7 +9,7 @@ use App\Http\Controllers\ErrorController;
 class DatabaseFactory
 {
     private static DatabaseFactory $factory;
-    private PDO $database;
+    private ?PDO $database;
 
     public static function getFactory():DatabaseFactory {
         if (!self::$factory) {
