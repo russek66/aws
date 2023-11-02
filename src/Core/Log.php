@@ -9,7 +9,7 @@ class Log {
 
     protected static ?Logger $instance = null;
 
-    static public function getLogger():Logger
+    public static function getLogger():Logger
     {
         if (! self::$instance) {
             self::configureInstance();

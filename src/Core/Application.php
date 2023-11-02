@@ -13,7 +13,8 @@ class Application
     private mixed $parameters;
     private mixed $controller;
 
-    public function __construct() {
+    public function __construct()
+    {
         $url = trim(Request::get(key: 'url'), '/');
         $url = filter_var($url, FILTER_SANITIZE_URL);
         $url = explode('/', $url);
@@ -27,18 +28,14 @@ class Application
         $this->controllerName = ucwords($this->controllerName) . 'Controller';;
         if(file_exists(Config::get(key: 'PATH_CONTROLLER') . $this->controllerName . '.php')) {
             require Config::get('PATH_CONTROLLER') . $this->controllerName . '.php';
-            $this->controller = new $this->controllerName();
-            if (is_callable(array($this->controller, $this->actionName))) {
-                if (!empty($this->parameters)) {
-                    $this->controller->{$this->actionName}(...$this->parameters);
-                } else {
-                    $this->controller->{$this->actionName}();
-                }
-            } else {
-                (new ErrorController)->fatalError(message: 'FATAL_ERROR_PAGE_NOT_FOUND', errorPage: '404');
+
+            if (!method_exists($this->controllerName, $this->actionName)) {
+                (new ErrorController())->fatalError(message: 'FATAL_ERROR_PAGE_NOT_FOUND', errorPage: '404');
+            }else {
+                $this->controller = new $this->controllerName($this->actionName,...$this->parameters);
             }
         } else {
-            (new ErrorController)->fatalError(message: 'FATAL_ERROR_PAGE_NOT_FOUND', errorPage: '404');
+            (new ErrorController())->fatalError(message: 'FATAL_ERROR_PAGE_NOT_FOUND', errorPage: '404');
         }
     }
 }

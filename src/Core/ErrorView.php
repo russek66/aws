@@ -4,11 +4,13 @@ namespace App\Core;
 
 class ErrorView
 {
-    public function renderError(string $error):void {
+    public function renderError(string $error):void
+    {
         require Config::get(key: 'ERROR_PATH_VIEW') .  $error . '.php';
     }
 
-    public function renderFatalError(string $error):void {
+    public function renderFatalError(string $error):void
+    {
         require Config::get(key: 'ERROR_PATH_VIEW') .  $error . '.php';
     }
 }

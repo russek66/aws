@@ -11,14 +11,16 @@ class DatabaseFactory
     private static DatabaseFactory $factory;
     private ?PDO $database;
 
-    public static function getFactory():DatabaseFactory {
+    public static function getFactory():DatabaseFactory
+    {
         if (!self::$factory) {
             self::$factory = new DatabaseFactory();
         }
         return self::$factory;
     }
 
-    public function getConnection():PDO {
+    public function getConnection():PDO
+    {
         if (!$this->database) {
             try {
                 $options = [
@@ -33,7 +35,7 @@ class DatabaseFactory
                     options: $options
                 );
             } catch (PDOException $e) {
-                (new ErrorController)->fatalError(
+                (new ErrorController())->fatalError(
                     message: 'FATAL_ERROR_DATABASE_CONNECTION' . ' Error code: ' . $e->getCode(),
                     errorPage: '404');
                 exit;
