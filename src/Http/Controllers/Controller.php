@@ -7,11 +7,10 @@ use App\Services\Auth;
 
 class Controller
 {
-    public function __construct(public View $View = new View())
+    protected bool $authStatus;
+
+    public function __construct(protected View $view = new View(), protected Auth $auth = new Auth())
     {
-        Session::init();
-//        if (!Session::userIsLoggedIn() AND Request::cookie('remember_me')) {
-//
-//        }
+        $this->authStatus = $auth->getAuthStatus();
     }
 }

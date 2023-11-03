@@ -5,7 +5,12 @@ namespace App\Core;
 class Session
 {
 
-    public static function init(): void
+    public function __construct()
+    {
+        $this->init();
+    }
+
+    public function init(): void
     {
         if (session_id() == '') {
             session_start();
