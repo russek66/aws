@@ -2,22 +2,37 @@
 
 namespace App\Services;
 
-use App\Core\View;
 use App\Core\Session;
 
 class Auth
 {
+    private bool $authenticationStatus = true;
+    private bool $concurrencyStatus = true;
 
-    public static function checkSessionConcurrency()
+    public function __construct()
     {
+        $this->checkAuthentication()->checkSessionConcurrency();
     }
 
-    public static function checkAuthentication(): bool
+    public function checkSessionConcurrency(): void
     {
-        Session::init();
+        if(Session::isSessionBroken()){
+            LoginModel::logout();
+            $this->concurrencyStatus = false;
+        }
+    }
+
+    public function checkAuthentication(): Auth
+    {
         if (!Session::userIsLoggedIn()) {
             Session::destroy();
-            return false;
+            $this->authenticationStatus = false;
         }
+        return $this;
+    }
+
+    public function getAuthStatus(): bool
+    {
+        return ($this->concurrencyStatus && $this->authenticationStatus);
     }
 }

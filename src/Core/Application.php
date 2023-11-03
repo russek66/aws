@@ -11,7 +11,6 @@ class Application
     private ?string $controllerName;
     private ?string $actionName;
     private mixed $parameters;
-    private mixed $controller;
 
     public function __construct()
     {
@@ -19,23 +18,26 @@ class Application
         $url = filter_var($url, FILTER_SANITIZE_URL);
         $url = explode('/', $url);
 
-        $this->controllerName = $url[0] ?? 'index';
+        $this->controllerName = ucwords($url[0]) . 'Controller' ?? 'index';
         $this->actionName = $url[1] ?? 'index';
 
         unset($url[0], $url[1]);
         $this->parameters = array_values($url);
 
-        $this->controllerName = ucwords($this->controllerName) . 'Controller';;
-        if(file_exists(Config::get(key: 'PATH_CONTROLLER') . $this->controllerName . '.php')) {
-            require Config::get('PATH_CONTROLLER') . $this->controllerName . '.php';
-
+        $controllerFile = Config::get('PATH_CONTROLLER') . $this->controllerName . '.php';
+        if (file_exists($controllerFile)) {
+            require $controllerFile;
             if (!method_exists($this->controllerName, $this->actionName)) {
-                (new ErrorController())->fatalError(message: 'FATAL_ERROR_PAGE_NOT_FOUND', errorPage: '404');
+                $this->handleNotFound(message: 'FATAL_ERROR_METHOD_NOT_FOUND', errorPage: '404');
             }else {
-                $this->controller = new $this->controllerName($this->actionName,...$this->parameters);
+                new $this->controllerName($this->actionName,...$this->parameters);
             }
         } else {
-            (new ErrorController())->fatalError(message: 'FATAL_ERROR_PAGE_NOT_FOUND', errorPage: '404');
+            $this->handleNotFound(message: 'FATAL_ERROR_CONTROLLER_NOT_FOUND', errorPage: '404');
         }
+    }
+    private function handleNotFound(string $message, string $errorPage): void
+    {
+        (new ErrorController())->fatalError($message, $errorPage);
     }
 }

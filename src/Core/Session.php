@@ -21,4 +21,9 @@ class Session
     {
         return false;
     }
+
+    public static function isSessionBroken(): bool
+    {
+        return false;
+    }
 }
