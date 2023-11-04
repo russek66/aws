@@ -26,17 +26,6 @@ class LoginController extends Controller
 
     }
 
-    public function loginWithCookie()
-    {
-        $login_successful = LoginModel::loginWithCookie(Request::cookie('remember_me'));
-        if ($login_successful) {
-            Redirect::to('dashboard/index');
-        } else {
-            LoginModel::deleteCookie();
-            Redirect::to('login/index');
-        }
-    }
-
     public function logout()
     {
 

@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Core\Request;
 use App\Core\Session;
+use App\Core\Login\Login;
 use App\Core\Login\LoginWithCookie;
 
 class Auth
@@ -15,6 +16,7 @@ class Auth
     public function __construct
     (
         protected Session $session = new Session(),
+        protected Login $login = new Login(),
         protected LoginWithCookie $loginWithCookie = new LoginWithCookie()
     )
     {
@@ -26,7 +28,7 @@ class Auth
     public function checkSessionConcurrency(): void
     {
         if($this->session->isSessionBroken()){
-            LoginModel::logout();
+            $this->login->logout();
             $this->concurrencyStatus = false;
         }
     }
