@@ -31,4 +31,12 @@ class Session
     {
         return false;
     }
+
+    public static function updateSessionId(string $userId): void
+    {
+    }
+
+    public static function get(string $string): string
+    {
+    }
 }

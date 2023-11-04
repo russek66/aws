@@ -13,7 +13,7 @@ class Request
         return "login/index";
     }
 
-    public static function post(mixed $key):void
+    public static function post(mixed $key):mixed
     {
 
     }

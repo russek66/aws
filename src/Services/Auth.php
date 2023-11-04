@@ -2,9 +2,10 @@
 
 namespace App\Services;
 
+use App\Core\Config;
 use App\Core\Request;
 use App\Core\Session;
-use App\Core\Login\Login;
+use App\Login\Login;
 use App\Core\Login\LoginWithCookie;
 
 class Auth
@@ -44,7 +45,7 @@ class Auth
 
     public function checkCookieAuthentication(): Auth
     {
-        $cookie = Request::cookie('remember_me');
+        $cookie = Request::cookie(Config::get('COOKIE_REMEMBER_ME_NAME'),);
         $this->loginWithCookie->setCookie($cookie);
 
         if (!$this->authenticationStatus AND $cookie) {
