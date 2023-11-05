@@ -13,12 +13,12 @@ class Request
         return "login/index";
     }
 
-    public static function post(mixed $key):mixed
+    public static function post(mixed $key): mixed
     {
 
     }
 
-    public static function cookie($key)
+    public static function cookie(string $key): mixed
     {
         if (isset($_COOKIE[$key])) {
             return $_COOKIE[$key];

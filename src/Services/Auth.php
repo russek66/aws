@@ -2,11 +2,8 @@
 
 namespace App\Services;
 
-use App\Core\Config;
-use App\Core\Request;
-use App\Core\Session;
-use App\Login\Login;
-use App\Core\Login\LoginWithCookie;
+use App\Core\{Config, Request, Session};
+use App\Login\{Login, LoginWithCookie};
 
 class Auth
 {

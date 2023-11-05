@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Core\Login;
+namespace App\Login;
 
 use App\Core\Config;
 
