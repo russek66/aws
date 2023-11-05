@@ -1,7 +1,5 @@
 <?php
 
-
-
 use App\Login\Login;
 use App\Core\{Request, Session};
 use App\Http\Controllers\Controller;
@@ -31,6 +29,7 @@ class LoginController extends Controller
 
     public function login(): void
     {
+        $this->view->render(filename: 'login/login');
         if (!Csrf::isTokenValid()) {
             // logout
         }

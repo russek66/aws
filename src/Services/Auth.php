@@ -26,7 +26,7 @@ class Auth
     public function checkSessionConcurrency(): void
     {
         if($this->session->isSessionBroken()){
-            $this->login->logout();
+            $this->login->doLogout();
             $this->concurrencyStatus = false;
         }
     }

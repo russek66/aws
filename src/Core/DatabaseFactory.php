@@ -8,10 +8,10 @@ use App\Http\Controllers\ErrorController;
 
 class DatabaseFactory
 {
-    private static DatabaseFactory $factory;
+    private static ?DatabaseFactory $factory;
     private ?PDO $database;
 
-    public static function getFactory():DatabaseFactory
+    public static function getFactory(): ?DatabaseFactory
     {
         if (!self::$factory) {
             self::$factory = new DatabaseFactory();
@@ -19,7 +19,7 @@ class DatabaseFactory
         return self::$factory;
     }
 
-    public function getConnection():PDO
+    public function getConnection(): ?PDO
     {
         if (!$this->database) {
             try {

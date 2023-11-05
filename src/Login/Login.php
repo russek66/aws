@@ -39,9 +39,9 @@ class Login
 
     private function validateUser(string $userName, string $userPassword): bool
     {
-        $user = new User();
-        if (!$user->getUsernameId(userName: $userName)) {
-            (new UserStats($userName))
+        $user = new User(userName: $userName);
+        if (!$user->getUserIdByName()) {
+            (new UserStats(userName: $userName))
                 ->incFailedLogin()
                 ->saveFailedLogin();
         }

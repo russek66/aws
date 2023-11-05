@@ -13,12 +13,13 @@ class LoginWithCookie
         if (!$this->cookie) {
             return false;
         }
+        return false;
     }
 
     public function deleteCookie(): void
     {
         setcookie(
-            Config::get('COOKIE_REMEMBER_NAME'),
+            Config::get('COOKIE_REMEMBER_ME_NAME'),
             false,
             time() - (3600 * 24 * 3650),
             Config::get('COOKIE_PATH'),
