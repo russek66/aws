@@ -2,6 +2,9 @@
 
 namespace App\Login;
 
+use App\Core\Config;
+use App\Core\DatabaseFactory;
+use App\Core\Request;
 use App\Core\Session;
 use App\User\User;
 
@@ -25,8 +28,10 @@ class Login
         return true;
     }
 
-    public function doLogout(string $userId): bool
+    public function doLogout(): bool
     {
+        $userId = Session::get('user_id');
+
         $this->deleteCookie($userId);
         Session::destroy();
         Session::updateSessionId($userId);
@@ -35,18 +40,43 @@ class Login
 
     private function deleteCookie(string $userId)
     {
+        // todo->fixLogic
+        if (isset($userId)) {
+            (new User())->getUserNameById($userId);
+            (new User())->deleteRememberedUserById($userId);
+        }
+
+        (new LoginWithCookie())
+            ->setCookie(Request::cookie(Config::get('COOKIE_REMEMBER_ME_NAME')))
+            ->deleteCookie();
     }
 
     private function validateUser(string $userName, string $userPassword): bool
     {
         $user = new User(userName: $userName);
+        $userStats = new UserStats(userName: $userName);
         if (!$user->getUserIdByName()) {
-            (new UserStats(userName: $userName))
-                ->incFailedLogin()
-                ->saveFailedLogin();
+            // todo->session->failedLogin
+            return false;
+        } elseif ($this->loginThrottle($userStats)) {
+            // todo->session->failedLogin
+            return false;
         }
-        $user->getUsernamePasswordByName(userName: $userName);
-
+        if (!password_verify($userPassword, $user->getUserPasswordByName())) {
+            $userStats->incUserFailedLogin(times: 1);
+            return false;
+        }
+        // todo->session->resetFailedLogin
         return true;
+    }
+
+    private function loginThrottle(UserStats $userStats): bool
+    {
+        if ($userStats->getFailedLoginTimes() >=3){
+            if ($userStats->getFailedLoginLastTime() > (time() - $userStats->getFailedLoginTimes() ^ 3)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

@@ -42,6 +42,6 @@ class LoginController extends Controller
 
     public function logout(): void
     {
-        $this->login->doLogout(userId: Session::get('user_id'));
+        $this->login->doLogout();
     }
 }

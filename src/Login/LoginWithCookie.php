@@ -19,7 +19,7 @@ class LoginWithCookie
     public function deleteCookie(): void
     {
         setcookie(
-            Config::get('COOKIE_REMEMBER_ME_NAME'),
+            $this->cookie,
             false,
             time() - (3600 * 24 * 3650),
             Config::get('COOKIE_PATH'),
@@ -29,8 +29,9 @@ class LoginWithCookie
         );
     }
 
-    public function setCookie(mixed $cookie): void
+    public function setCookie(mixed $cookie): LoginWithCookie
     {
         $this->cookie = $cookie;
+        return $this;
     }
 }
