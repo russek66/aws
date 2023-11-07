@@ -4,12 +4,12 @@ namespace App\Login;
 
 use App\Core\DatabaseFactory;
 
-class UserStats
+readonly class UserStats
 {
 
     public function __construct(
-        private readonly string $userName,
-        private readonly DatabaseFactory $database = new DatabaseFactory()
+        private ?string $userName,
+        private DatabaseFactory $database = new DatabaseFactory()
     )
     {
     }

@@ -36,7 +36,20 @@ class Session
     {
     }
 
-    public static function get(string $string): string
+    public static function get(string $key): ?string
     {
+        if (isset($_SESSION[$key])) {
+            return Filter::XSSFilter($_SESSION[$key]);
+        }
+    }
+
+    public static function set(string $string, int|string|null $param): void
+    {
+        $_SESSION[$string] = $param;
+    }
+
+    public static function add(string $key, $value): void
+    {
+        $_SESSION[$key][] = $value;
     }
 }

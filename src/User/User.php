@@ -4,12 +4,13 @@ namespace App\User;
 
 use App\Core\DatabaseFactory;
 
-class User
+readonly class User
 {
 
     public function __construct(
-        private readonly string $userName,
-        private readonly DatabaseFactory $database = new DatabaseFactory()
+        private ?string $userName = null,
+        private ?string $userId = null,
+        private DatabaseFactory $database = new DatabaseFactory()
     )
     {
 
@@ -67,7 +68,7 @@ class User
         return $query?->fetch();
     }
 
-    public function deleteRememberedUserById(string $userId)
+    public function deleteRememberedUserById()
     {
         $sql = "UPDATE 
                     users
@@ -83,7 +84,7 @@ class User
             ?->prepare($sql);
 
         $query?->execute(array(
-                ':user_id' => $userId,
+                ':user_id' => $this->userId,
                 ':user_remember_me_token' => null
             )
         );
@@ -91,7 +92,7 @@ class User
         return $query?->fetch();
     }
 
-    public function getUserNameById(string $userId)
+    public function getUserNameById()
     {
         $sql = "SELECT 
                     user_name
@@ -109,7 +110,7 @@ class User
             ?->prepare($sql);
 
         $query?->execute(array(
-                ':user_id' => $userId,
+                ':user_id' => $this->userId,
                 ':provider_type' => 'DEFAULT'
             )
         );

@@ -42,7 +42,7 @@ class Auth
 
     public function checkCookieAuthentication(): Auth
     {
-        $cookie = Request::cookie(Config::get('COOKIE_REMEMBER_ME_NAME'),);
+        $cookie = Request::cookie(Config::get('COOKIE_REMEMBER_ME_NAME'));
         $this->loginWithCookie->setCookie($cookie);
 
         if (!$this->authenticationStatus AND $cookie) {
