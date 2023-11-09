@@ -30,4 +30,10 @@ class View
         require $filenamePath .'.php';
     }
 
+    public function renderJSON(mixed $data): mixed
+    {
+        header("Content-Type: application/json");
+        json_encode($data);
+    }
+
 }

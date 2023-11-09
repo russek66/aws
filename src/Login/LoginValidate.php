@@ -17,7 +17,7 @@ class LoginValidate
         if (empty([$userName, $userPassword])) {
             return false;
         }
-        
+
         $user = new User(userName: $userName);
         $userStats = new UserStats(userName: $userName);
 

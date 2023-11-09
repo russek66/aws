@@ -11,15 +11,17 @@ class IndexController extends Controller
 
     public function index():void
     {
-        $this->View->render(filename: 'index/index');
+        $this->view->render(filename: 'index/index');
     }
 
-    public function showIndex(mixed $data):void
+    public function showIndex(mixed ...$data):void
     {
-        $this->View->render(filename: 'index/index', data:
+        $this->view->render(filename: 'index/index', data:
             [
                 'user' => $data
             ]
         );
+        var_dump($this->view->user);
+
     }
 }

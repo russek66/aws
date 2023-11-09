@@ -30,7 +30,7 @@ class Application
             if (!method_exists($this->controllerName, $this->actionName)) {
                 $this->handleNotFound(message: 'FATAL_ERROR_METHOD_NOT_FOUND', errorPage: '404');
             }else {
-                new $this->controllerName($this->actionName,...$this->parameters);
+                (new $this->controllerName())->{$this->actionName}(...$this->parameters);
             }
         } else {
             $this->handleNotFound(message: 'FATAL_ERROR_CONTROLLER_NOT_FOUND', errorPage: '404');

@@ -10,7 +10,7 @@ class Request
         if (isset($_GET[$key])) {
             return $_GET[$key];
         }
-        return "login/login";
+        return "index/index";
     }
 
     public static function post(mixed $key): mixed
