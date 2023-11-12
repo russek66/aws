@@ -6,15 +6,43 @@ class Register
 {
 
     public function __construct(
-        public mixed $data,
+        private mixed $data,
         public mixed $response = null
     )
     {
-        $this->validateData();
+
+        $this->filterData($this->data)
+            ->doRegister();
     }
 
-    public function validateData(): mixed
+    private function doRegister(): void
     {
-        new RegisterData($this->data);
+        if ($this->validateData() AND !$this->doesExist()) {
+            // todo -> process registration
+
+        }
+    }
+
+    private function validateData(): bool
+    {
+        return (new RegisterValidateData($this->data))->validateData();
+    }
+
+    private function doesExist(): bool
+    {
+        return (new RegisterValidateExistence($this->data))->validateExistence();
+    }
+
+    public function filterData($data): Register
+    {
+        foreach ($data as $key => $value) {
+            $data[$key] = trim($value);
+            $data[$key] = stripslashes($data[$key]);
+            $data[$key] = strip_tags($data[$key]);
+        }
+
+        $this->data = $data;
+
+        return $this;
     }
 }

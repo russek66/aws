@@ -19,7 +19,7 @@ class LoginValidate
         }
 
         $user = new User(userName: $userName);
-        $userStats = new UserStats(userName: $userName);
+        $userStats = new LoginUserStats(userName: $userName);
 
         if (! $user->getUserIdByName()) {
             $this->incNameNotFound();
@@ -39,7 +39,7 @@ class LoginValidate
         return true;
     }
 
-    private function loginThrottle(?UserStats $userStats): bool
+    private function loginThrottle(?LoginUserStats $userStats): bool
     {
         if ($userStats->getFailedLoginTimes() >= 3 OR $userStats->getFailedLoginLastTime() > (time() - $userStats->getFailedLoginTimes() ^ 3)) {
             return true;

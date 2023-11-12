@@ -1,7 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
-
+use App\Http\Controllers\Controller;
 use App\Register\Register;
 
 class RegisterController extends Controller

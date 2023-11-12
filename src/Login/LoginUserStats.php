@@ -4,7 +4,7 @@ namespace App\Login;
 
 use App\Core\DatabaseFactory;
 
-readonly class UserStats
+readonly class LoginUserStats
 {
 
     public function __construct(
