@@ -4,12 +4,12 @@ namespace App\Register;
 
 use App\Core\DatabaseFactory;
 
-class RegisterValidateExistence
+readonly class RegisterValidateExistence
 {
 
     public function __construct(
-        protected mixed $data,
-        private readonly DatabaseFactory $database = new DatabaseFactory()
+        private mixed $data,
+        private DatabaseFactory $database = new DatabaseFactory()
     )
     {
 

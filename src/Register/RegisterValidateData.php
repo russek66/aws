@@ -6,7 +6,7 @@ class RegisterValidateData
 {
 
     public function __construct(
-        protected mixed $data,
+        private readonly mixed $data,
         private bool $validationResult = true
     )
     {

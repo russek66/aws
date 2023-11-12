@@ -19,7 +19,9 @@ class Register
     {
         if ($this->validateData() AND !$this->doesExist()) {
             // todo -> process registration
-
+            $this->sendEmail()
+                ?->registerUserInDatabase();
+            // todo -> sent verification e-mail
         }
     }
 
@@ -44,5 +46,21 @@ class Register
         $this->data = $data;
 
         return $this;
+    }
+
+    private function registerUserInDatabase(): void
+    {
+        if (!(new RegisterSaveNewUser($this->data))->registrationResult) {
+            // todo -> logic
+        }
+    }
+
+    private function sendEmail(): ?Register
+    {
+        //
+        if () {
+            return $this;
+        }
+        return null;
     }
 }
