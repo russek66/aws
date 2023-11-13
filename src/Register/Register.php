@@ -10,16 +10,15 @@ class Register
         public mixed $response = null
     )
     {
-
         $this->filterData($this->data)
             ->doRegister();
     }
 
     private function doRegister(): void
     {
-        if ($this->validateData() AND !$this->doesExist()) {
+        if ($this->validateData() AND !$this->doesUserExist()) {
             // todo -> process registration
-            $this->sendEmail()
+            $this->sendActivationEmail()
                 ?->registerUserInDatabase();
             // todo -> sent verification e-mail
         }
@@ -30,7 +29,7 @@ class Register
         return (new RegisterValidateData($this->data))->validateData();
     }
 
-    private function doesExist(): bool
+    private function doesUserExist(): bool
     {
         return (new RegisterValidateExistence($this->data))->validateExistence();
     }
@@ -55,10 +54,10 @@ class Register
         }
     }
 
-    private function sendEmail(): ?Register
+    private function sendActivationEmail(): ?Register
     {
         //
-        if () {
+        if (!$emailSent) {
             return $this;
         }
         return null;
