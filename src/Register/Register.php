@@ -10,7 +10,7 @@ class Register
         public mixed $response = null
     )
     {
-        $this->filterData($this->data)
+        $this->filterData(data:$this->data)
             ->doRegister();
     }
 
@@ -19,7 +19,8 @@ class Register
         if ($this->validateData() AND !$this->doesUserExist()) {
             // todo -> process registration
             $this->sendActivationEmail()
-                ?->registerUserInDatabase();
+                ?->registerUserInDatabase()
+                ?->generateResponse();
             // todo -> sent verification e-mail
         }
     }
@@ -31,7 +32,7 @@ class Register
 
     private function doesUserExist(): bool
     {
-        return (new RegisterValidateExistence($this->data))->validateExistence();
+        return (new RegisterValidateExistence(data:$this->data))->validateExistence();
     }
 
     public function filterData($data): Register
@@ -47,19 +48,30 @@ class Register
         return $this;
     }
 
-    private function registerUserInDatabase(): void
+    private function registerUserInDatabase(): ?Register
     {
-        if (!(new RegisterSaveNewUser($this->data))->registrationResult) {
+        if ((new RegisterNewUser(data: $this->data))->registrationResult) {
             // todo -> logic
+            return $this;
         }
+        return null;
     }
 
     private function sendActivationEmail(): ?Register
     {
         //
-        if (!$emailSent) {
+        if ((new Email(data:$this->data))->emailSendResult) {
             return $this;
         }
         return null;
+    }
+
+    private function generateResponse(): void
+    {
+        if ($this->registrationResult AND $this->emailSendResult) {
+            $this->response = 1;
+        } else {
+            $this->response = 0;
+        }
     }
 }

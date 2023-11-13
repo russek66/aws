@@ -5,7 +5,7 @@ namespace App\Register;
 use App\Core\DatabaseFactory;
 use DateTime;
 
-class RegisterSaveNewUser
+class RegisterNewUser
 {
 
     public function __construct(

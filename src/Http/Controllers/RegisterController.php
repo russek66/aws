@@ -16,8 +16,8 @@ class RegisterController extends Controller
         $this->view->render('register/index');
     }
 
-    public function register(): mixed
+    public function register(): void
     {
-        return $this->view->renderJSON((new Register(data: $_POST))->response);
+        $this->view->render('register/response', (new Register(data: $_POST))->response);
     }
 }
