@@ -51,5 +51,6 @@ class LoginController extends Controller
     public function logout(): void
     {
         $this->login->doLogout();
+        $this->loginSocial->doLogout();
     }
 }

@@ -2,13 +2,13 @@
 
 namespace App\Login;
 
+use App\Core\Config;
 use App\Core\Session;
 use App\Register\RegisterValidateData;
 use App\User\User;
 use App\User\UserData;
 use Hybridauth\Exception\Exception;
 use Hybridauth\Hybridauth;
-use Hybridauth\Provider\Google;
 
 class LoginValidate
 {
@@ -82,14 +82,15 @@ class LoginValidate
             ]
         ))->getUserTokenById();
 
-        $adapter = new Google($config);
         try {
-            $hybridauth = new Hybridauth($config);
+            $hybridauth = new Hybridauth(Config::get('HYBRIDAUTH'));
             $adapter = $hybridauth->getAdapter($provider);
             $adapter->setAccessToken($accessToken);
         } catch (Exception $e) {
             echo $e->getMessage();
-        }
+            return false;
 
+        }
+        return true;
     }
 }

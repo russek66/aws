@@ -15,6 +15,29 @@ class UserData
 
     }
 
+    public function getUserDataById(): mixed
+    {
+        $sql = "SELECT 
+                    *
+                FROM 
+                    users
+                WHERE 
+                    user_id = :user_id
+                LIMIT 1";
+
+        $query = $this->database
+            ?->getFactory()
+            ?->getConnection()
+            ?->prepare($sql);
+
+        $query?->execute(array(
+                ':user_id' => $this->data->userId
+            )
+        );
+
+        return $query?->fetch();
+    }
+
     public function getUserTokenById(): mixed
     {
         $sql = "SELECT 
@@ -31,7 +54,7 @@ class UserData
             ?->prepare($sql);
 
         $query?->execute(array(
-                ':user_name' => $this->data->userId
+                ':user_id' => $this->data->userId
             )
         );
 

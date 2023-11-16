@@ -20,4 +20,13 @@ class LoginSocial
         }
         return true;
     }
+
+    public function doLogout(): bool
+    {
+//        $adapter->disconnect();
+//        $hybridauth->disconnectAllAdapters();
+
+        Session::destroy();
+        return true;
+    }
 }
