@@ -1,7 +1,8 @@
 <?php
 
 use App\Login\Login;
-use App\Core\{Request, Session};
+use App\Login\LoginSocial;
+use App\Core\{Csrf, Request, Session};
 use App\Http\Controllers\Controller;
 
 class LoginController extends Controller
@@ -11,7 +12,8 @@ class LoginController extends Controller
     public function __construct(
         string $methodName,
         mixed $parameters = null,
-        private readonly Login $login = new Login()
+        private readonly Login $login = new Login(),
+        private readonly LoginSocial $loginSocial = new LoginSocial()
     )
     {
         parent::__construct();
@@ -38,6 +40,12 @@ class LoginController extends Controller
             Request::post('user_password'),
             Request::post('set_remember_me_cookie')
         );
+    }
+
+    public function loginSocial(): void
+    {
+        $this->view->render(filename: 'login/login');
+        $this->loginSocial->doLoginSocial();
     }
 
     public function logout(): void

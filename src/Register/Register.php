@@ -17,11 +17,9 @@ class Register
     private function doRegister(): void
     {
         if ($this->validateData() AND !$this->doesUserExist()) {
-            // todo -> process registration
-            $this->sendActivationEmail()
-                ?->registerUserInDatabase()
+            $this->registerUserInDatabase()
+                ?->sendActivationEmail()
                 ?->generateResponse();
-            // todo -> sent verification e-mail
         }
     }
 
@@ -48,30 +46,29 @@ class Register
         return $this;
     }
 
-    private function registerUserInDatabase(): ?Register
+    private function registerUserInDatabase(): Register
     {
-        if ((new RegisterNewUser(data: $this->data))->registrationResult) {
-            // todo -> logic
-            return $this;
+        if (!(new RegisterNewUser(data: $this->data))->registrationResult) {
+            $this->response = 0;
         }
-        return null;
+        return $this;
     }
 
-    private function sendActivationEmail(): ?Register
+    private function sendActivationEmail(): Register
     {
-        //
-        if ((new Email(data:$this->data))->emailSendResult) {
-            return $this;
+        if (!(new Email(data:$this->data))->emailSendResult) {
+            $this->response = 0;
         }
-        return null;
+        return $this;
     }
 
     private function generateResponse(): void
     {
-        if ($this->registrationResult AND $this->emailSendResult) {
-            $this->response = 1;
+//        todo -> rework response format and msg
+        if ($this->response === 1) {
+            echo "200 OK";
         } else {
-            $this->response = 0;
+            echo "500 ERROR";
         }
     }
 }

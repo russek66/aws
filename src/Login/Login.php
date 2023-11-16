@@ -15,8 +15,7 @@ class Login
         ?string $userPassword,
         ?bool $rememberMeCookie = null,
         LoginValidate $loginValidate = new LoginValidate()
-    ): bool
-    {
+    ): bool {
         $validationResult = $loginValidate->validateUser(userName: $userName, userPassword: $userPassword);
         if (!$validationResult) {
             return false;

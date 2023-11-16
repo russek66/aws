@@ -12,6 +12,7 @@
     "require" : {
         "php": ">=8.2",
         "monolog/monolog": "^3.5",
+        "hybridauth/hybridauth" : "~3.0",
         "ext-pdo" : "*"
     },
     "autoload": {
