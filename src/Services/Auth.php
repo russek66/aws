@@ -3,7 +3,7 @@
 namespace App\Services;
 
 use App\Core\{Config, Request, Session};
-use App\Login\{Login, LoginWithCookie};
+use App\Login\{Login, LoginSocial, LoginWithCookie};
 
 class Auth
 {
@@ -15,6 +15,7 @@ class Auth
     (
         protected Session $session = new Session(),
         protected Login $login = new Login(),
+        protected LoginSocial $loginSocial = new LoginSocial(),
         protected LoginWithCookie $loginWithCookie = new LoginWithCookie()
     )
     {

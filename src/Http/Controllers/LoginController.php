@@ -32,8 +32,8 @@ class LoginController extends Controller
     public function login(): void
     {
         $this->view->render(filename: 'login/login');
-        if (!Csrf::isTokenValid()) {
-            // logout
+        if (!(new Csrf())->validateToken()) {
+            $this->logout();
         }
         $this->login->doLogin(
             Request::post('user_name'),
@@ -44,7 +44,7 @@ class LoginController extends Controller
 
     public function loginSocial(): void
     {
-        $this->view->render(filename: 'login/login');
+        $this->view->render(filename: 'login/social');
         $this->loginSocial->doLoginSocial();
     }
 

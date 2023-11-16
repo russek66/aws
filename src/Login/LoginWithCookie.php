@@ -13,7 +13,7 @@ class LoginWithCookie
         if (!$this->cookie) {
             return false;
         }
-        return false;
+        return true;
     }
 
     public function deleteCookie(): void

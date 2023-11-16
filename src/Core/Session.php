@@ -43,9 +43,9 @@ class Session
         }
     }
 
-    public static function set(string $string, int|string|null $param): void
+    public static function set(string $key, int|string|null $param): void
     {
-        $_SESSION[$string] = $param;
+        $_SESSION[$key] = $param;
     }
 
     public static function add(string $key, $value): void

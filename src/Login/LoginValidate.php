@@ -3,13 +3,20 @@
 namespace App\Login;
 
 use App\Core\Session;
+use App\Register\RegisterValidateData;
 use App\User\User;
+use App\User\UserData;
+use Hybridauth\Exception\Exception;
+use Hybridauth\Hybridauth;
+use Hybridauth\Provider\Google;
 
 class LoginValidate
 {
 
-    public function validateUser(?string $userName, ?string $userPassword): bool
-    {
+    public function validateUser(
+        ?string $userName = null,
+        ?string $userPassword = null
+    ): bool {
         if ($this->BFCheck()) {
             return false;
         }
@@ -50,18 +57,39 @@ class LoginValidate
     private function incNameNotFound(): void
     {
         Session::set(
-            'failed-login-count',
-            Session::get('failed-login-count') + 1
+            key:'failed-login-count',
+            param: Session::get(key: 'failed-login-count') + 1
         );
-        Session::set('last-failed-login', time());
+        Session::set(
+            key:'last-failed-login',
+            param: time()
+        );
     }
 
     private function BFCheck(): bool
     {
-        if (Session::get('failed-login-count') >= 3 OR Session::get('last-failed-login') > (time() - Session::get('failed-login-count')) ^ 3) {
-            Session::add('feedback_negative',Text::get('FEEDBACK_LOGIN_FAILED_3_TIMES'));
+        if (Session::get(key: 'failed-login-count') >= 3 OR Session::get(key:'last-failed-login') > (time() - Session::get(key: 'failed-login-count')) ^ 3) {
             return true;
         }
         return false;
+    }
+
+    public function validateSocialUser(?string $userId, ?string $provider): bool
+    {
+        $accessToken = (new UserData(
+            [
+                'user_id' => $userId,
+            ]
+        ))->getUserTokenById();
+
+        $adapter = new Google($config);
+        try {
+            $hybridauth = new Hybridauth($config);
+            $adapter = $hybridauth->getAdapter($provider);
+            $adapter->setAccessToken($accessToken);
+        } catch (Exception $e) {
+            echo $e->getMessage();
+        }
+
     }
 }
