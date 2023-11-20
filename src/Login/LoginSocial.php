@@ -2,8 +2,11 @@
 
 namespace App\Login;
 
+use App\Core\Config;
 use App\Core\Request;
 use App\Core\Session;
+use Hybridauth\Exception\Exception;
+use Hybridauth\Hybridauth;
 
 class LoginSocial
 {
@@ -11,21 +14,19 @@ class LoginSocial
     public function doLoginSocial(
         LoginValidate $loginValidate = new LoginValidate()
     ): bool {
-        $validationResult = $loginValidate->validateSocialUser(
-            userId: Session::get(key: 'user_id'),
-            provider: Session::get(key: 'provider'));
 
-        if (!$validationResult) {
-            return false;
-        }
         return true;
     }
 
     public function doLogout(): bool
     {
-//        $adapter->disconnect();
-//        $hybridauth->disconnectAllAdapters();
-
+        try {
+            $hybridauth = new Hybridauth(Config::get('HYBRIDAUTH'));
+            $hybridauth->disconnectAllAdapters();
+        } catch (Exception $e) {
+            echo $e->getMessage();
+            return false;
+        }
         Session::destroy();
         return true;
     }

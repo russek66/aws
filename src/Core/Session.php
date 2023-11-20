@@ -2,6 +2,8 @@
 
 namespace App\Core;
 
+use App\Login\LoginValidate;
+
 class Session
 {
 
@@ -24,6 +26,15 @@ class Session
 
     public static function userIsLoggedIn(): bool
     {
+
+//        $loginValidate = new LoginSocialValidate();
+//        $validationResult = $loginValidate->validateSocialUser(
+//            userId: Session::get(key: 'user_id'),
+//            provider: Session::get(key: 'provider'));
+//
+//        if (!$validationResult) {
+//            return false;
+//        }
         return false;
     }
 
@@ -41,6 +52,7 @@ class Session
         if (isset($_SESSION[$key])) {
             return Filter::XSSFilter($_SESSION[$key]);
         }
+        return null;
     }
 
     public static function set(string $key, int|string|null $param): void

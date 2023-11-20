@@ -4,7 +4,6 @@ namespace App\Login;
 
 use App\Core\Config;
 use App\Core\Session;
-use App\Register\RegisterValidateData;
 use App\User\User;
 use App\User\UserData;
 use Hybridauth\Exception\Exception;
@@ -74,23 +73,4 @@ class LoginValidate
         return false;
     }
 
-    public function validateSocialUser(?string $userId, ?string $provider): bool
-    {
-        $accessToken = (new UserData(
-            [
-                'user_id' => $userId,
-            ]
-        ))->getUserTokenById();
-
-        try {
-            $hybridauth = new Hybridauth(Config::get('HYBRIDAUTH'));
-            $adapter = $hybridauth->getAdapter($provider);
-            $adapter->setAccessToken($accessToken);
-        } catch (Exception $e) {
-            echo $e->getMessage();
-            return false;
-
-        }
-        return true;
-    }
 }
