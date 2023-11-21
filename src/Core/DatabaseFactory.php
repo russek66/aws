@@ -8,8 +8,8 @@ use App\Http\Controllers\ErrorController;
 
 class DatabaseFactory
 {
-    private static ?DatabaseFactory $factory;
-    private ?PDO $database;
+    private static ?DatabaseFactory $factory = null;
+    private ?PDO $database = null;
 
     public static function getFactory(): ?DatabaseFactory
     {

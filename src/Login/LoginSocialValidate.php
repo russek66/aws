@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Core;
+namespace App\Login;
 
+use App\Core\Config;
 use App\User\UserData;
 use Hybridauth\Exception\Exception;
 use Hybridauth\Hybridauth;
@@ -16,10 +17,6 @@ class LoginSocialValidate
     public function validateSocialUser(?string $userId, ?string $provider): bool
     {
         $accessToken = $this->getAccessToken($userId);
-
-        if (!$userId OR !$provider OR !$accessToken) {
-            return false;
-        }
 
         try {
             $hybridauth = new Hybridauth(Config::get('HYBRIDAUTH'));

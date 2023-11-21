@@ -2,7 +2,7 @@
 
 namespace App\Core;
 
-use App\Login\LoginValidate;
+use App\Login\LoginSocialValidate;
 
 class Session
 {
@@ -26,15 +26,14 @@ class Session
 
     public static function userIsLoggedIn(): bool
     {
+        $loginValidate = new LoginSocialValidate();
+        $validationResult = $loginValidate->validateSocialUser(
+            userId: Session::get(key: 'user_id'),
+            provider: Session::get(key: 'provider'));
 
-//        $loginValidate = new LoginSocialValidate();
-//        $validationResult = $loginValidate->validateSocialUser(
-//            userId: Session::get(key: 'user_id'),
-//            provider: Session::get(key: 'provider'));
-//
-//        if (!$validationResult) {
-//            return false;
-//        }
+        if (!$validationResult) {
+            return false;
+        }
         return false;
     }
 

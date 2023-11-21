@@ -4,12 +4,12 @@ namespace App\User;
 
 use App\Core\DatabaseFactory;
 
-class UserData
+readonly class UserData
 {
 
     public function __construct(
         private mixed $data,
-        private readonly DatabaseFactory $database = new DatabaseFactory()
+        private mixed $database = new DatabaseFactory()
     )
     {
 
@@ -41,7 +41,7 @@ class UserData
     public function getUserTokenById(): mixed
     {
         $sql = "SELECT 
-                    user_access_token
+                    user_name
                 FROM 
                     users
                 WHERE 
@@ -53,11 +53,11 @@ class UserData
             ?->getConnection()
             ?->prepare($sql);
 
-        $query?->execute(array(
-                ':user_id' => $this->data->userId
+        $query->execute(array(
+                ':user_id' => $this->data["user_id"]
             )
         );
 
-        return $query?->fetch();
+        return $query->fetch();
     }
 }

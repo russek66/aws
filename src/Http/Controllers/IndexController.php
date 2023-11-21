@@ -21,7 +21,5 @@ class IndexController extends Controller
                 'user' => $data
             ]
         );
-        var_dump($this->view->user);
-
     }
 }
