@@ -7,7 +7,7 @@ use App\Core\Request;
 use App\Core\Session\{Session, SessionUsage};
 use App\User\User;
 
-class Login extends Session
+class Login
 {
     use SessionUsage;
     use Config {
