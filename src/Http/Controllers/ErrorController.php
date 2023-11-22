@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Core\ErrorView;
+use App\Core\View\ViewError;
 use App\Core\Log;
 
 class ErrorController extends Controller
@@ -13,13 +13,13 @@ class ErrorController extends Controller
     }
     public function basicError(string $message):void
     {
-        (new ErrorView())->renderError(error: $message);
+        (new ViewError())->renderError(error: $message);
         Log::info($message, ['extra' => 'information', 'about' => 'anything' ]);
     }
 
     public function fatalError(string $message, string $errorPage, array $data = null):void
     {
-        (new ErrorView())->renderFatalError(error: $errorPage);
+        (new ViewError())->renderFatalError(error: $errorPage);
         Log::error($message, ['extra' => 'information', 'about' => 'anything' ]);
     }
 }

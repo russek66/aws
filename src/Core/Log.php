@@ -6,6 +6,7 @@ use Monolog\Handler\RotatingFileHandler;
 use Monolog\Logger;
 
 class Log {
+    use Config;
 
     protected static ?Logger $instance = null;
 

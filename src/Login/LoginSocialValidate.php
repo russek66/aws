@@ -9,6 +9,7 @@ use Hybridauth\Hybridauth;
 
 class LoginSocialValidate
 {
+    use Config;
 
     public function __construct()
     {
@@ -19,7 +20,7 @@ class LoginSocialValidate
         $accessToken = $this->getAccessToken($userId);
 
         try {
-            $hybridauth = new Hybridauth(Config::get('HYBRIDAUTH'));
+            $hybridauth = new Hybridauth($this->get('HYBRIDAUTH'));
             $adapter = $hybridauth->getAdapter($provider);
             $adapter->setAccessToken($accessToken);
         } catch (Exception $e) {

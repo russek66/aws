@@ -8,6 +8,8 @@ use App\Http\Controllers\ErrorController;
 
 class Application
 {
+    use Config;
+
     private ?string $controllerName;
     private ?string $actionName;
     private mixed $parameters;
@@ -24,7 +26,7 @@ class Application
         unset($url[0], $url[1]);
         $this->parameters = array_values($url);
 
-        $controllerFile = Config::get('PATH_CONTROLLER') . $this->controllerName . '.php';
+        $controllerFile = $this->get('PATH_CONTROLLER') . $this->controllerName . '.php';
         if (file_exists($controllerFile)) {
             require $controllerFile;
             if (!method_exists($this->controllerName, $this->actionName)) {

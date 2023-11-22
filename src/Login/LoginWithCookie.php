@@ -6,6 +6,8 @@ use App\Core\Config;
 
 class LoginWithCookie
 {
+    use Config;
+
     private mixed $cookie;
 
     public function doLoginWithCookie(): bool
@@ -22,10 +24,10 @@ class LoginWithCookie
             $this->cookie,
             false,
             time() - (3600 * 24 * 3650),
-            Config::get('COOKIE_PATH'),
-            Config::get('COOKIE_DOMAIN'),
-            Config::get('COOKIE_SECURE'),
-            Config::get('COOKIE_HTTP')
+            $this->get('COOKIE_PATH'),
+            $this->get('COOKIE_DOMAIN'),
+            $this->get('COOKIE_SECURE'),
+            $this->get('COOKIE_HTTP')
         );
     }
 

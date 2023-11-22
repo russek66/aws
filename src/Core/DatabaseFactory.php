@@ -8,6 +8,8 @@ use App\Http\Controllers\ErrorController;
 
 class DatabaseFactory
 {
+    use Config;
+
     private static ?DatabaseFactory $factory = null;
     private ?PDO $database = null;
 
@@ -28,10 +30,10 @@ class DatabaseFactory
                     PDO::ATTR_ERRMODE => PDO::ERRMODE_WARNING
                 ];
                 $this->database = new PDO(
-                    Config::get('DB_TYPE') . ':host=' . Config::get('DB_HOST') . ';dbname=' .
-                    Config::get('DB_NAME') . ';port=' . Config::get('DB_PORT') . ';charset=' . Config::get('DB_CHARSET'),
-                    username: Config::get('DB_USER'),
-                    password: Config::get('DB_PASS'),
+                    $this->get('DB_TYPE') . ':host=' . $this->get('DB_HOST') . ';dbname=' .
+                    $this->get('DB_NAME') . ';port=' . $this->get('DB_PORT') . ';charset=' . $this->get('DB_CHARSET'),
+                    username: $this->get('DB_USER'),
+                    password: $this->get('DB_PASS'),
                     options: $options
                 );
             } catch (PDOException $e) {

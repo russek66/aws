@@ -4,7 +4,7 @@ namespace App\Core;
 
 use App\Http\Controllers\ErrorController;
 
-class Config
+trait Config
 {
     public static mixed $config = null;
 

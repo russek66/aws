@@ -7,9 +7,13 @@ use App\Core\Request;
 use App\Core\Session\{Session, SessionUsage};
 use App\User\User;
 
-class Login
+class Login extends Session
 {
     use SessionUsage;
+    use Config {
+        SessionUsage::get insteadof Config;
+        Config::get as getConfig;
+    }
 
     public function doLogin(
         ?string $userName,
@@ -43,7 +47,7 @@ class Login
         }
 
         (new LoginWithCookie())
-            ->setCookie(Request::cookie(Config::get('COOKIE_REMEMBER_ME_NAME')))
+            ->setCookie(Request::cookie($this->getConfig('COOKIE_REMEMBER_ME_NAME')))
             ->deleteCookie();
     }
 }

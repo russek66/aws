@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Core\{View, Session};
+use App\Core\View\View;
 use App\Services\Auth;
 
 class Controller
