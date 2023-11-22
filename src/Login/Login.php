@@ -4,11 +4,12 @@ namespace App\Login;
 
 use App\Core\Config;
 use App\Core\Request;
-use App\Core\Session;
+use App\Core\Session\{Session, SessionUsage};
 use App\User\User;
 
 class Login
 {
+    use SessionUsage;
 
     public function doLogin(
         ?string $userName,
@@ -26,11 +27,11 @@ class Login
 
     public function doLogout(): bool
     {
-        $userId = Session::get(key: 'user_id');
+        $userId = $this->get(key: 'user_id');
 
         $this->deleteCookie($userId);
-        Session::destroy();
-        Session::updateSessionId($userId);
+        (new Session())->destroy();
+        $this->updateSessionId($userId);
         return true;
     }
 

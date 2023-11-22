@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Core\{Config, Request, Session};
+use App\Core\{Config, Request, Session\Session};
 use App\Login\{Login, LoginSocial, LoginWithCookie};
 
 class Auth

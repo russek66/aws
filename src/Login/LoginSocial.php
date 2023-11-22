@@ -4,7 +4,7 @@ namespace App\Login;
 
 use App\Core\Config;
 use App\Core\Request;
-use App\Core\Session;
+use App\Core\Session\Session;
 use Hybridauth\Exception\Exception;
 use Hybridauth\Hybridauth;
 
@@ -27,7 +27,7 @@ class LoginSocial
             echo $e->getMessage();
             return false;
         }
-        Session::destroy();
+        (new Session())->destroy();
         return true;
     }
 }

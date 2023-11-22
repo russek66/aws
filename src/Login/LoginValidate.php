@@ -2,16 +2,13 @@
 
 namespace App\Login;
 
-use App\Core\Config;
-use App\Core\Session;
+use App\Core\Session\SessionUsage;
 use App\User\User;
-use App\User\UserData;
-use Hybridauth\Exception\Exception;
-use Hybridauth\Hybridauth;
 
 class LoginValidate
 {
-
+    use SessionUsage;
+    
     public function validateUser(
         ?string $userName = null,
         ?string $userPassword = null
@@ -55,11 +52,11 @@ class LoginValidate
 
     private function incNameNotFound(): void
     {
-        Session::set(
+        $this->set(
             key:'failed-login-count',
-            param: Session::get(key: 'failed-login-count') + 1
+            param: $this->get(key: 'failed-login-count') + 1
         );
-        Session::set(
+        $this->set(
             key:'last-failed-login',
             param: time()
         );
@@ -67,7 +64,7 @@ class LoginValidate
 
     private function BFCheck(): bool
     {
-        if (Session::get(key: 'failed-login-count') >= 3 OR Session::get(key:'last-failed-login') > (time() - Session::get(key: 'failed-login-count')) ^ 3) {
+        if ($this->get(key: 'failed-login-count') >= 3 OR $this->get(key:'last-failed-login') > (time() - $this->get(key: 'failed-login-count')) ^ 3) {
             return true;
         }
         return false;

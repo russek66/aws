@@ -41,7 +41,7 @@ readonly class UserData
     public function getUserTokenById(): mixed
     {
         $sql = "SELECT 
-                    user_name
+                    user_access_token
                 FROM 
                     users
                 WHERE 
