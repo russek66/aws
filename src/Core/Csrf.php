@@ -7,6 +7,10 @@ use App\Core\Session\SessionUsage;
 class Csrf
 {
     use SessionUsage;
+    use Request {
+        SessionUsage::get insteadof Request;
+        Request::get as getRequest;
+    }
 
     public function generateToken(): ?string
     {
@@ -24,7 +28,7 @@ class Csrf
 
     public function validateToken(): bool
     {
-        $token = Request::post('csrf_token');
+        $token = $this->post('csrf_token');
         return $token === $this->get(key:'csrf_token') && !empty($token);
     }
 }

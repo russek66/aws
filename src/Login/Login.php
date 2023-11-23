@@ -10,9 +10,12 @@ use App\User\User;
 class Login
 {
     use SessionUsage;
+    use Request;
     use Config {
         SessionUsage::get insteadof Config;
+        SessionUsage::get insteadof Request;
         Config::get as getConfig;
+        Request::get as getRequest;
     }
 
     public function doLogin(
@@ -47,7 +50,7 @@ class Login
         }
 
         (new LoginWithCookie())
-            ->setCookie(Request::cookie($this->getConfig('COOKIE_REMEMBER_ME_NAME')))
+            ->setCookie($this->cookie($this->getConfig('COOKIE_REMEMBER_ME_NAME')))
             ->deleteCookie();
     }
 }

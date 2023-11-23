@@ -13,14 +13,14 @@ class Log {
     public static function getLogger():Logger
     {
         if (! self::$instance) {
-            self::configureInstance();
+            (new Log())->configureInstance();
         }
         return self::$instance;
     }
 
-    protected static function configureInstance():Logger
+    protected function configureInstance():Logger
     {
-        $dir = Config::get(key: 'LOG_PATH');
+        $dir = $this->get(key: 'LOG_PATH');
         $logger = new Logger('APP_LOGGER');
         $logger->pushHandler(new RotatingFileHandler($dir . 'main.log', 5));
         return self::$instance = $logger;

@@ -7,7 +7,7 @@ use App\Http\Controllers\Controller;
 
 class LoginController extends Controller
 {
-
+    use Request;
 
     public function __construct(
         string $methodName,
@@ -36,9 +36,9 @@ class LoginController extends Controller
             $this->logout();
         }
         $this->login->doLogin(
-            Request::post('user_name'),
-            Request::post('user_password'),
-            Request::post('set_remember_me_cookie')
+            $this->post('user_name'),
+            $this->post('user_password'),
+            $this->post('set_remember_me_cookie')
         );
     }
 

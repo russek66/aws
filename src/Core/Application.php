@@ -9,6 +9,10 @@ use App\Http\Controllers\ErrorController;
 class Application
 {
     use Config;
+    use Request {
+        Config::get insteadof Request;
+        Request::get as getRequest;
+    }
 
     private ?string $controllerName;
     private ?string $actionName;
@@ -16,7 +20,7 @@ class Application
 
     public function __construct()
     {
-        $url = trim(Request::get(key: 'url'), '/');
+        $url = trim($this->getRequest(key: 'url'), '/');
         $url = filter_var($url, FILTER_SANITIZE_URL);
         $url = explode('/', $url);
 

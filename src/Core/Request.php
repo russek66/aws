@@ -2,10 +2,10 @@
 
 namespace App\Core;
 
-class Request
+trait Request
 {
 
-    public static function get(mixed $key):mixed
+    public function get(mixed $key):mixed
     {
         if (isset($_GET[$key])) {
             return $_GET[$key];
@@ -13,12 +13,12 @@ class Request
         return "index/index";
     }
 
-    public static function post(mixed $key): mixed
+    public function post(mixed $key): mixed
     {
 
     }
 
-    public static function cookie(string $key): mixed
+    public function cookie(string $key): mixed
     {
         if (isset($_COOKIE[$key])) {
             return $_COOKIE[$key];
