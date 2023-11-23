@@ -9,7 +9,10 @@ class Controller
 {
     protected bool $authStatus;
 
-    public function __construct(protected View $view = new View(), protected Auth $auth = new Auth())
+    public function __construct(
+        protected View $view = new View(),
+        protected Auth $auth = new Auth()
+    )
     {
         $this->authStatus = $auth->getAuthStatus();
     }
