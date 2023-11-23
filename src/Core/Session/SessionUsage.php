@@ -20,7 +20,7 @@ trait SessionUsage
         if (!$validationResult) {
             return false;
         }
-        return false;
+        return true;
     }
 
     public function isSessionBroken(): bool

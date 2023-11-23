@@ -38,7 +38,7 @@ class LoginSocial
             echo $e->getMessage();
         }
 
-        $validationResult = $loginSocialValidate->validatefirstTime(userIdSocial: $ID, provider: $this->provider);
+        $validationResult = $loginSocialValidate->validateFirstTime(userIdSocial: $ID, provider: $this->provider);
 
         if (!$validationResult) {
             $registerNewSocialUser = (new RegisterNewUserSocial($this->userProfile));

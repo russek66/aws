@@ -47,7 +47,7 @@ class LoginSocialValidate
         ))->getUserTokenById();
     }
 
-    public function validatefirstTime($userIdSocial, ?string $provider): mixed
+    public function validateFirstTime($userIdSocial, ?string $provider): mixed
     {
         // todo -> (new UserData)->getUserIdSocial($provider)
     }
