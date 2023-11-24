@@ -11,11 +11,15 @@ class RegisterNewUserSocial implements NewUserInterface
     use PasswordHash;
 
     public function __construct(
-        private readonly mixed $data,
+        private readonly mixed $userProfile,
+        private readonly mixed $accessToken,
+        private readonly string $provider,
+        private ?array $hashArray = null,
         public bool $registrationResult = true,
         private readonly DatabaseFactory $database = new DatabaseFactory()
     )
     {
+        $this->hashArray = $this->generateHash($this->userProfile->userPassword);
         $this->registerUser();
     }
 
@@ -45,14 +49,14 @@ class RegisterNewUserSocial implements NewUserInterface
 
         $query->execute([
             '
-        :user_name' => $this->data->userName,
-            ':user_password_hash' => $this->generateHash($this->data->userPassword),
-            ':user_email' => $this->data->userEmail,
+        :user_name' => $this->userProfile->userName,
+            ':user_password_hash' => $this->hashArray['passwordHash'],
+            ':user_email' => $this->userProfile->userEmail,
             ':user_creation_timestamp' => time(),
-            ':user_activation_hash' => $this->data->userActivationHash,
+            ':user_activation_hash' => $this->hashArray['activationHash'],
             ':user_activation_expiry' => (new DateTime('+1 day'))->format(
                 'Y-m-d H:i:s'),
-            ':user_provider_type' => 'DEFAULT'
+            ':user_provider_type' => $this->provider
         ]);
 
         if ($query->rowCount() <=> 1) {

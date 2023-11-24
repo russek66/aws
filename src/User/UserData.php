@@ -60,4 +60,30 @@ readonly class UserData
 
         return $query->fetch();
     }
+
+    public function getUserIdBySocialId(): mixed
+    {
+        $sql = "SELECT 
+                    user_id
+                FROM 
+                    users
+                WHERE 
+                    user_id_social = :user_id_social
+                AND 
+                    user_provider_type = :user_provider_type
+                LIMIT 1";
+
+        $query = $this->database
+            ?->getFactory()
+            ?->getConnection()
+            ?->prepare($sql);
+
+        $query->execute(array(
+                ':user_id_social' => $this->data["user_id_social"],
+                ':user_provider_type' => $this->data["user_provider_type"]
+            )
+        );
+
+        return $query->fetch();
+    }
 }

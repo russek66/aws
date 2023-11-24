@@ -12,16 +12,11 @@ class LoginSocialValidate
     use Config;
 
     public function __construct(
-        protected ?Hybridauth $hybridauth = null
+        private readonly ?Hybridauth $hybridauth,
+        private ?bool $validationResult = null
     )
     {
-        try {
-            $this->hybridauth = new Hybridauth($this->get('HYBRIDAUTH'));
-        } catch (Exception $e) {
-            echo $e->getMessage();
 
-            // todo -> show error
-        }
     }
 
     public function validateSocialUser(?string $userId, ?string $provider): bool
@@ -49,6 +44,11 @@ class LoginSocialValidate
 
     public function validateFirstTime($userIdSocial, ?string $provider): mixed
     {
-        // todo -> (new UserData)->getUserIdSocial($provider)
+        $userId = (new UserData([
+            'user_id-social' => $userIdSocial,
+            'user_provider_type' => $provider
+        ]))->getUserIdBySocialId();
+
+        $this->validationResult = (bool)$userId;
     }
 }
