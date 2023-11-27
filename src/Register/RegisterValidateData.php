@@ -13,22 +13,22 @@ class RegisterValidateData
 
     }
 
-    public function validateData(): bool
+
+    public function validateData(): RegisterValidateData
     {
         $this->validateUserName()
             ->validateUserPassword()
             ->validateUserEmail();
 
-        return $this->validationResult;
+        return $this;
     }
 
     public function validateUserName(): RegisterValidateData
     {
 
-        if (!preg_match('/^[a-zA-Z0-9]{2,64}$/', $this->data->username) OR empty($this->data->username)) {
+        if (!preg_match('/^[a-z]\w{6,23}[^_]$/i', $this->data['user_name']) OR empty($this->data['user_name'])) {
             $this->validationResult = false;
         }
-
         return $this;
     }
 
@@ -62,5 +62,10 @@ class RegisterValidateData
         }
 
         return $this;
+    }
+
+    public function getValidationResult(): bool
+    {
+        return $this->validationResult;
     }
 }

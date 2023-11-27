@@ -6,17 +6,18 @@ use App\Http\Controllers\ErrorController;
 
 trait Config
 {
-    public static mixed $config = null;
+    public mixed $config = null;
 
-    public static function get($key):mixed
+    public function get($key): mixed
     {
-        if (!self::$config) {
+        if (!$this->config) {
             $configFile = '../config/config.' . Environment::get() . '.php';
             if (!file_exists($configFile)) {
-                (new ErrorController())->fatalError(message: 'FATAL_ERROR_PAGE_NOT_FOUND', errorPage: '404');
+//                (new ErrorController())->fatalError(message: 'FATAL_ERROR_PAGE_NOT_FOUND', errorPage: '404');
+                return false;
             }
-            self::$config = require $configFile;
+            $this->config = require $configFile;
         }
-        return self::$config[$key];
+        return $this->config[$key];
     }
 }

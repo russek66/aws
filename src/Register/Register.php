@@ -25,7 +25,7 @@ class Register
 
     private function validateData(): bool
     {
-        return (new RegisterValidateData($this->data))->validateData();
+        return (new RegisterValidateData($this->data))->validateData()->getValidationResult();
     }
 
     private function doesUserExist(): bool
