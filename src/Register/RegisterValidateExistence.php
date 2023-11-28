@@ -8,7 +8,7 @@ readonly class RegisterValidateExistence
 {
 
     public function __construct(
-        private mixed $data,
+        private mixed $object,
         private DatabaseFactory $database = new DatabaseFactory()
     )
     {
@@ -31,7 +31,7 @@ readonly class RegisterValidateExistence
             ?->prepare($sql);
 
         $query?->execute(array(
-                ':user_name' => $this->data->userName
+                ':user_name' => $this->object->userName
             )
         );
 

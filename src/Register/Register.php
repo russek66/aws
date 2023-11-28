@@ -2,16 +2,20 @@
 
 namespace App\Register;
 
+use App\DTO\RegisterDTO;
+use App\Register\Helper\FilterData;
+
 class Register
 {
+    use FilterData;
 
     public function __construct(
-        private mixed $data,
+        private RegisterDTO $object,
         public mixed $response = null
     )
     {
-        $this->filterData(data:$this->data)
-            ->doRegister();
+        $this->object = $this->doFilterData(object: $this->object);
+        $this->doRegister();
     }
 
     private function doRegister(): void
@@ -25,30 +29,17 @@ class Register
 
     private function validateData(): bool
     {
-        return (new RegisterValidateData($this->data))->validateData()->getValidationResult();
+        return (new RegisterValidateData($this->object))->validateData()->getValidationResult();
     }
 
     private function doesUserExist(): bool
     {
-        return (new RegisterValidateExistence(data:$this->data))->validateExistence();
-    }
-
-    public function filterData($data): Register
-    {
-        foreach ($data as $key => $value) {
-            $data[$key] = trim($value);
-            $data[$key] = stripslashes($data[$key]);
-            $data[$key] = strip_tags($data[$key]);
-        }
-
-        $this->data = $data;
-
-        return $this;
+        return (new RegisterValidateExistence(object: $this->object))->validateExistence();
     }
 
     private function registerUserInDatabase(): Register
     {
-        if (!(new RegisterNewUser(data: $this->data))->registrationResult) {
+        if (!(new RegisterNewUser(data: $this->object))->registrationResult) {
             $this->response = 0;
         }
         return $this;
@@ -56,7 +47,7 @@ class Register
 
     private function sendActivationEmail(): Register
     {
-        if (!(new Email(data:$this->data))->emailSendResult) {
+        if (!(new Email(data:$this->object))->emailSendResult) {
             $this->response = 0;
         }
         return $this;
