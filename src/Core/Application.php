@@ -30,9 +30,15 @@ class Application
         unset($url[0], $url[1]);
         $this->parameters = array_values($url);
 
-        $controllerFile = $this->get('PATH_CONTROLLER') . $this->controllerName . '.php';
-        if (file_exists($controllerFile)) {
-            require $controllerFile;
+        $controllerFiles = [
+            $this->get('PATH_CONTROLLER') . $this->controllerName . '.php',
+            $this->get('PATH_CONTROLLER_ADMIN') . $this->controllerName . '.php'
+        ];
+
+        if ($controllerExists = array_filter($controllerFiles, 'file_exists')) {
+            foreach ($controllerExists as $key => $value){
+                $value ?? require $value;
+            }
             if (!method_exists($this->controllerName, $this->actionName)) {
                 $this->handleNotFound(message: 'FATAL_ERROR_METHOD_NOT_FOUND', errorPage: '404');
             }else {

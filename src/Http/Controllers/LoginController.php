@@ -4,10 +4,12 @@ use App\Login\Login;
 use App\Login\LoginSocial;
 use App\Core\{Csrf, Request, Session};
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Helper\AuthHelper;
 
 class LoginController extends Controller
 {
     use Request;
+    use AuthHelper;
 
     public function __construct(
         string $methodName,
@@ -17,11 +19,7 @@ class LoginController extends Controller
     )
     {
         parent::__construct();
-        if ($this->authStatus) {
-            $this->$methodName($parameters);
-        }else {
-            $this->view->render(filename: "error/blocked");
-        }
+        $this->checkAuth(methodName: $methodName, parameters: $parameters);
     }
 
     public function index(): void

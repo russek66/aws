@@ -20,9 +20,10 @@ class View
         if (array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
+        return null;
     }
 
-    public function render(string $filename, mixed $data = null):void
+    public function render(string $filename, mixed $data = null): void
     {
         if ($data) {
             foreach ($data as $key => $value) {
@@ -34,7 +35,7 @@ class View
         require $filenamePath .'.php';
     }
 
-    public function renderJSON(mixed $data): mixed
+    public function renderJSON(mixed $data): void
     {
         header("Content-Type: application/json");
         json_encode($data);

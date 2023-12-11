@@ -9,7 +9,6 @@ class RegisterController extends Controller
 
     public function __construct
     (
-        private RegisterDTO|null $registerDTO = null
     )
     {
         parent::__construct();
@@ -22,7 +21,7 @@ class RegisterController extends Controller
 
     public function register(): void
     {
-        $this->registerDTO = new RegisterDTO(
+        $registerDTO = new RegisterDTO(
             $_POST['user_name'],
             $_POST['user_password'],
             $_POST['user_email'],
@@ -30,7 +29,7 @@ class RegisterController extends Controller
         );
         $this->view->render(
             'register/response',
-            (new Register(object: $this->registerDTO))->response
+            (new Register(object: $registerDTO))->response
         );
     }
 }

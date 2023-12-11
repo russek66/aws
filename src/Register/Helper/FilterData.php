@@ -13,9 +13,8 @@ trait FilterData
 
         foreach ($object as $key => $value) {
             $array[$key] = trim($value);
-            $array[$key] = stripslashes($array[$key]);
-            $array[$key] = strip_tags($array[$key]);
         }
+        $array = array_map('htmlspecialchars', $array);
 
         return new RegisterDTO(
             $array['userName'],
