@@ -10,4 +10,8 @@ error_reporting(E_ALL);
 ini_set("display_errors", 1);
 ini_set('session.cookie_httponly', 1);
 
-new Application();
+(new Application([
+    'uri' => $_SERVER['REQUEST_URI'],
+    'method' => $_SERVER['REQUEST_METHOD']
+]
+))->run();
