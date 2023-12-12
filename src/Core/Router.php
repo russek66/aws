@@ -10,14 +10,37 @@ class Router
 {
     use Config;
     use Request {
-        Config::get insteadof Request;
+        Config::get as getConfig;
         Request::get as getRequest;
+        Request::post as postRequest;
     }
 
     private ?string $controllerName;
     private ?string $actionName;
     private mixed $parameters;
+    private array $routes = [];
 
+    public function register(string $requestMethod, string $route, callable|array $action): self
+    {
+        $this->routes[$requestMethod][$route] = $action;
+
+        return $this;
+    }
+
+    public function get(string $route, callable|array $action): self
+    {
+        return $this->register('get', $route, $action);
+    }
+
+    public function post(string $route, callable|array $action): self
+    {
+        return $this->register('post', $route, $action);
+    }
+
+    public function routes(): array
+    {
+        return $this->routes;
+    }
 
     public function resolve(string $requestUri, string $requestMethod): void
     {
@@ -33,8 +56,8 @@ class Router
         $this->parameters = array_values($url);
 
         $controllerFiles = [
-            $this->get('PATH_CONTROLLER') . $this->controllerName . '.php',
-            $this->get('PATH_CONTROLLER_ADMIN') . $this->controllerName . '.php'
+            $this->getConfig('PATH_CONTROLLER') . $this->controllerName . '.php',
+            $this->getConfig('PATH_CONTROLLER_ADMIN') . $this->controllerName . '.php'
         ];
 
         if ($controllerExists = array_filter($controllerFiles, 'file_exists')) {
