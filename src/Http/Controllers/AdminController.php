@@ -5,7 +5,6 @@ use App\Login\Login;
 use App\Login\LoginSocial;
 use App\Core\Request;
 use App\Http\Controllers\Helper\AuthHelper;
-use App\User\UserChartData;
 
 class AdminController extends Controller
 {
@@ -24,13 +23,7 @@ class AdminController extends Controller
 
     public function index(): void
     {
-        $usersData = new UserChartData();
-
-        $this->view->render(filename: 'admin/dashboard/index', data:
-            [
-                'new_users' => $usersData->getNewUsersFromLastDays()
-            ]
-        );
+        $this->view->render(filename: 'admin/dashboard/index');
     }
 
 }
