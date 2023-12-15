@@ -16,6 +16,6 @@ class Application
 
     public function run(): void
     {
-        (new Router())->resolve($this->request['uri'], strtolower($this->request['method']));
+        (new Router())->resolveEndPoint(uri: $this->request['uri'], method: strtolower($this->request['method']));
     }
 }

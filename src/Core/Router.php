@@ -42,7 +42,7 @@ class Router
         return $this->routes;
     }
 
-    public function resolve(string $requestUri, string $requestMethod): void
+    public function resolveWeb(string $requestUri, string $requestMethod): void
     {
 
         $url = trim($this->getRequest(key: 'url'), '/');
@@ -74,8 +74,26 @@ class Router
         }
     }
 
+    public function resolveApi(string $requestUri, string $requestMethod): void
+    {
+
+    }
+
     private function handleNotFound(string $message, string $errorPage): void
     {
         (new ErrorController())->fatalError($message, $errorPage);
+    }
+
+    public function resolveEndPoint(mixed $uri, string $method): void
+    {
+        $url = explode('/', $uri);
+        $url = array_map('strtolower', $url);
+
+        if (array_search('api', $url)) {
+            $this->resolveApi($uri, $method);
+        } else {
+            $this->resolveWeb($uri, $method);
+        }
+
     }
 }
