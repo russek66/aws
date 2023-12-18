@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\Controller;
-use App\Http\RestAPI\User\UserChartData;
+use App\Http\API\User\UserChartData;
 use App\Login\Login;
 use App\Login\LoginSocial;
 use App\Core\Request;
@@ -23,7 +23,7 @@ class APIController extends Controller
         $this->checkAuth(methodName: $methodName, parameters: $parameters);
     }
 
-    public function index(): void
+    public function user(): void
     {
         $this->view->render(filename: 'admin/dashboard/index');
     }
