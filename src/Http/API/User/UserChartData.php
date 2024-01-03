@@ -102,10 +102,7 @@ readonly class UserChartData
             ?->getConnection()
             ?->prepare($sql);
 
-        $query?->execute([
-                ':days' => (new DateTime())->modify("-{$days} days")
-            ]
-        );
+        $query?->execute();
 
         return (new View())->renderJSON(200, $query?->fetch());
     }

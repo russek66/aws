@@ -2,7 +2,7 @@
 
 namespace App\Register\Helper;
 
-use App\DTO\RegisterDTO;
+use App\DataTransfer\RegisterDTO;
 
 trait FilterData
 {

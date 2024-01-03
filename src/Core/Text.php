@@ -11,7 +11,7 @@ trait Text
 
     private mixed $texts = null;
 
-    public function get(string $file, string $key)
+    public function get(string $file, mixed $key)
     {
 
         if (! $this->texts) {
