@@ -2,12 +2,21 @@
 
 namespace App\Register;
 
+use App\Core\Text;
+use App\DTO\RegisterDTO;
+use App\Enum\RegisterAttemptStatus;
+
 class RegisterValidateData
 {
 
+    use Text {
+        Text::get as getText;
+    }
+
     public function __construct(
-        private readonly mixed $data,
-        private bool $validationResult = true
+        private readonly RegisterDTO $RDTO,
+        private bool $validationResult = true,
+        private mixed $validationResultMessage = RegisterAttemptStatus::SUCCESS
     )
     {
 
@@ -16,56 +25,70 @@ class RegisterValidateData
 
     public function validateData(): RegisterValidateData
     {
-        $this->validateUserName()
-            ->validateUserPassword()
-            ->validateUserEmail();
+        return $this->validateUserName()
+            ?->validateUserPassword()
+            ?->validateUserEmail();
+    }
 
+    public function validateUserName(): ?RegisterValidateData
+    {
+
+        if (!preg_match('/^[a-z]\w{6,23}[^_]$/i', $this->RDTO->userName) OR empty($this->RDTO->userName)) {
+            $this->validationResult = false;
+            $this->validationResultMessage = RegisterAttemptStatus::FAILED_USER;
+            return null;
+        }
         return $this;
     }
 
-    public function validateUserName(): RegisterValidateData
+    public function validateUserEmail(): ?RegisterValidateData
     {
-
-        if (!preg_match('/^[a-z]\w{6,23}[^_]$/i', $this->data['user_name']) OR empty($this->data['user_name'])) {
+        if (empty($this->RDTO->userEmail)) {
             $this->validationResult = false;
-        }
-        return $this;
-    }
-
-    public function validateUserEmail(): RegisterValidateData
-    {
-        if (empty($this->data['user_email'])) {
-            $this->validationResult = false;
-        }
-        if ($this->data['user_email'] !== $this->data['user_email_repeat']) {
-            $this->validationResult = false;
-        }
-        if (!filter_var($this->data['user_email'], FILTER_VALIDATE_EMAIL)) {
-            $this->validationResult = false;
+            $this->validationResultMessage = RegisterAttemptStatus::EMPTY_EMAIL;
+            return null;
         }
 
-        return $this;
-    }
-
-    public function validateUserPassword(): RegisterValidateData
-    {
-        if (empty($this->data['user_password']) OR empty($this->data['user_password_repeat'])) {
+        if ($this->RDTO->userEmail !== $this->RDTO->userEmailRepeat) {
             $this->validationResult = false;
+            $this->validationResultMessage = RegisterAttemptStatus::EMAIL_REPEAT_WRONG;
+            return null;
         }
 
-        if ($this->data['user_password'] !== $this->data['user_password_repeat']) {
+        if (!filter_var($this->RDTO->userEmail, FILTER_VALIDATE_EMAIL)) {
             $this->validationResult = false;
-        }
-
-        if (!preg_match("/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/", $this->data['user_password'])) {
-            $this->validationResult = false;
+            $this->validationResultMessage = RegisterAttemptStatus::INVALID_EMAIL_FORMAT;
+            return null;
         }
 
         return $this;
     }
 
-    public function getValidationResult(): bool
+    public function validateUserPassword(): ?RegisterValidateData
     {
-        return $this->validationResult;
+        if (empty($this->RDTO->userPassword) OR empty($this->RDTO->userPasswordRepeat)) {
+            $this->validationResult = false;
+            $this->validationResultMessage = RegisterAttemptStatus::EMPTY_PASSWORD;
+            return null;
+        }
+
+        if ($this->RDTO->userPassword !== $this->RDTO->userPasswordRepeat) {
+            $this->validationResult = false;
+            $this->validationResultMessage =RegisterAttemptStatus::PASSWORD_REPEAT_WRONG;
+            return null;
+        }
+
+        if (!preg_match("/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/", $this->RDTO->userPassword)) {
+            $this->validationResult = false;
+            $this->validationResultMessage = RegisterAttemptStatus::INVALID_PASSWORD_FORMAT;
+            return null;
+        }
+
+        return $this;
+    }
+
+    public function getValidationResult(): array
+    {
+        return [$this->validationResult, $this->getText('registration', $this->validationResultMessage)];
     }
 }
