@@ -8,6 +8,7 @@ final readonly class RegisterDTO
     (
         public ?string $userName,
         public ?string $userPassword,
+        public ?string $userPasswordRepeat,
         public ?string $userEmail,
         public ?string $userEmailRepeat,
     )
