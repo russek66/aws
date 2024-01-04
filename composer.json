@@ -12,8 +12,9 @@
     "require" : {
         "php": ">=8.2",
         "monolog/monolog": "^3.5",
-        "hybridauth/hybridauth" : "~3.0",
+        "hybridauth/hybridauth" : "^3.11",
         "ext-pdo" : "*",
+        "twig/twig" : "^3.8"
     },
     "autoload": {
         "psr-4": {

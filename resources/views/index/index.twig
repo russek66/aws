@@ -1,7 +1,10 @@
 <div class="container">
     <h1>IndexController/index</h1>
     <div class="box">
-                <h3>What happens here ?</h3>
+                <h3>What happens here ?
+                    {% for i in range(0, 3) %}
+                        {{ i }},
+                    {% endfor %}</h3>
         <p>
             This is the homepage. As no real URL-route (like /register/index) is provided, the app uses the default
             controller and the default action, defined in application/config/config.php, by default it's

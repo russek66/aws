@@ -92,9 +92,8 @@ class RegisterValidateData
         return $this->validationResult;
     }
 
-    public function getValidationMessage(): array|string
+    public function getValidationMessage(): array
     {
-
         if($this->validationResultMessage === RegisterAttemptStatus::SUCCESS) {
             $msg = [
                 'status'    => RegisterAttemptStatus::SUCCESS->name,
