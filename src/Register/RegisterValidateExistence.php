@@ -3,13 +3,21 @@
 namespace App\Register;
 
 use App\Core\DatabaseFactory;
+use App\Core\Text;
+use App\Enum\RegisterAttemptStatus;
 
-readonly class RegisterValidateExistence
+class RegisterValidateExistence
 {
 
+    use Text {
+        Text::get as getText;
+    }
+
     public function __construct(
-        private mixed $object,
-        private DatabaseFactory $database = new DatabaseFactory()
+        private readonly mixed $object,
+        private readonly DatabaseFactory $database = new DatabaseFactory(),
+        private bool $validationResult = true,
+        private mixed $validationResultMessage = RegisterAttemptStatus::SUCCESS
     )
     {
 
@@ -36,6 +44,8 @@ readonly class RegisterValidateExistence
         );
 
         $query?->fetch();
+        $this->validationResultMessage = RegisterAttemptStatus::FAILED_USER_EXIST;
+
         return true;
     }
 
@@ -55,19 +65,42 @@ readonly class RegisterValidateExistence
             ?->prepare($sql);
 
         $query?->execute(array(
-                ':user_email' => $this->data->userEmail
+                ':user_email' => $this->object->userEmail
             )
         );
 
         $query?->fetch();
+        $this->validationResultMessage = RegisterAttemptStatus::FAILED_EMAIL_EXIST;
+
         return true;
     }
 
-    public function validateExistence(): bool
+    public function validateExistence(): RegisterValidateExistence
     {
         if ($this->validateNameExistence() OR $this->validateEmailExistence()) {
-            return true;
+            $this->validationResult = false;
         }
-        return false;
+        return $this;
+    }
+
+    public function getValidationResult(): bool
+    {
+        return $this->validationResult;
+    }
+
+    public function getValidationMessage(): array
+    {
+        if($this->validationResultMessage === RegisterAttemptStatus::SUCCESS) {
+            $msg = [
+                'status'    => RegisterAttemptStatus::SUCCESS->name,
+                'msg'       => $this->getText('registration',  RegisterAttemptStatus::SUCCESS->value)
+            ];
+        } else {
+            $msg = [
+                'status'    => RegisterAttemptStatus::FAILED->name,
+                'msg'       => $this->getText('registration',  $this->validationResultMessage->value)
+            ];
+        }
+        return $msg;
     }
 }
