@@ -3,6 +3,7 @@
 namespace App\Register;
 
 use App\DataTransfer\RegisterDTO;
+use App\Email\Email;
 use App\Enum\RegisterReturnStatus;
 use App\Register\Helper\FilterData;
 use App\Register\Helper\GetResult;
@@ -66,7 +67,7 @@ class Register
 
     private function sendActivationEmail(): Register
     {
-        $activationEmail = (new Email(data:$this->object));
+        $activationEmail = (new Email());
 
         $this->setResponseCode($activationEmail);
         $this->setParams($activationEmail);
