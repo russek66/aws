@@ -31,7 +31,8 @@ class Register
 
     private function validateData(): bool
     {
-        $validation = (new RegisterValidateData($this->object))?->validateData();
+        $validation = (new RegisterValidateData($this->object));
+        $validation->validateData();
 
         $this->setResponseCode($validation);
         $this->setParams($validation);
@@ -42,7 +43,8 @@ class Register
 
     private function doesUserExist(): bool
     {
-        $validation = (new RegisterValidateExistence(object: $this->object))->validateExistence();
+        $validation = (new RegisterValidateExistence(object: $this->object));
+        $validation->validateExistence();
 
         $this->setResponseCode($validation);
         $this->setParams($validation);

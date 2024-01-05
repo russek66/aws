@@ -18,8 +18,8 @@ trait GetResult
     public function setParams(object $object): void
     {
         $reflectionClass = new ReflectionClass($object);
-        $this->result = $reflectionClass->getProperty('result')->getValue();
-        $this->resultMessage = $reflectionClass->getProperty('resultMessage')->getValue();
+        $this->result = $reflectionClass->getProperty('result')->getValue($object);
+        $this->resultMessage = $reflectionClass->getProperty('resultMessage')->getValue($object);
     }
 
     public function getResult(): bool
