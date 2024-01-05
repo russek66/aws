@@ -5,10 +5,12 @@ namespace App\Register;
 use App\DataTransfer\RegisterDTO;
 use App\Enum\RegisterReturnStatus;
 use App\Register\Helper\FilterData;
+use App\Register\Helper\GetResult;
 
 class Register
 {
     use FilterData;
+    use GetResult;
 
     public function __construct(
         private RegisterDTO $object,
@@ -25,7 +27,6 @@ class Register
             $this->registerUserInDatabase()
                 ?->sendActivationEmail();
         }
-        $this->generateResponse();
     }
 
     private function validateData(): bool
@@ -33,9 +34,10 @@ class Register
         $validation = (new RegisterValidateData($this->object))?->validateData();
 
         $this->setResponseCode($validation);
-        $this->response['data']['validation'] = $validation->getValidationMessage();
+        $this->setParams($validation);
+        $this->response['data']['validation'] = $this->getMessage();
 
-        return $validation->getValidationResult();
+        return $this->getResult();
     }
 
     private function doesUserExist(): bool
@@ -43,40 +45,38 @@ class Register
         $validation = (new RegisterValidateExistence(object: $this->object))->validateExistence();
 
         $this->setResponseCode($validation);
-        $this->response['data']['existence'] = $validation->getValidationMessage();
+        $this->setParams($validation);
+        $this->response['data']['existence'] = $this->getMessage();
 
-        return $validation->getValidationResult();
+        return $this->getResult();
     }
 
     private function registerUserInDatabase(): Register
     {
-        if (!(new RegisterNewUser(data: $this->object))->registrationResult) {
-            $this->response = 0;
-        }
+        $registration = (new RegisterNewUser(data: $this->object));
+
+        $this->setResponseCode($registration);
+        $this->setParams($registration);
+        $this->response['data']['registration'] = $this->getMessage();
+
         return $this;
     }
 
     private function sendActivationEmail(): Register
     {
-        if (!(new Email(data:$this->object))->emailSendResult) {
-            $this->response = 0;
-        }
+        $activationEmail = (new Email(data:$this->object));
+
+        $this->setResponseCode($activationEmail);
+        $this->setParams($activationEmail);
+        $this->response['data']['existence'] = $this->getMessage();
+
         return $this;
     }
 
-    private function generateResponse(): void
+    private function setResponseCode(object $object): void
     {
-//        todo -> rework response format and msg
-        if ($this->response === 1) {
-            echo "200 OK";
-        } else {
-            echo "500 ERROR";
-        }
-    }
-
-    private function setResponseCode($object): void
-    {
-        if ($object->getValidationResult()){
+        $this->setParams($object);
+        if ($this->getResult()){
             $this->response = ['code' => RegisterReturnStatus::SUCCESS->value];
         } else {
             $this->response = ['code' => RegisterReturnStatus::FAILED->value];

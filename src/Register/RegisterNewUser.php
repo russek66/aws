@@ -3,6 +3,7 @@
 namespace App\Register;
 
 use App\Core\DatabaseFactory;
+use App\Enum\RegisterAttemptStatus;
 use App\Register\Helper\PasswordHash;
 use DateTime;
 
@@ -12,7 +13,8 @@ class RegisterNewUser implements NewUserInterface
 
     public function __construct(
         private readonly mixed $data,
-        public bool $registrationResult = true,
+        private bool $result = true,
+        private mixed $resultMessage = RegisterAttemptStatus::SUCCESS,
         private readonly DatabaseFactory $database = new DatabaseFactory()
     )
     {
@@ -43,17 +45,19 @@ class RegisterNewUser implements NewUserInterface
             ?->getConnection()
             ?->prepare($sql);
 
-        $query->execute(array('
-            :user_name' => $this->data->userName,
+        $query->execute([
+            ':user_name' => $this->data->userName,
             ':user_password_hash' => $this->generateHash($this->data->userPassword),
             ':user_email' => $this->data->userEmail,
             ':user_creation_timestamp' => time(),
             ':user_activation_hash' => $this->data->userActivationHash,
             ':user_activation_expiry' => (new DateTime('+1 day'))->format('Y-m-d H:i:s'),
-            ':user_provider_type' => 'DEFAULT'));
+            ':user_provider_type' => 'DEFAULT'
+        ]);
 
         if ($query->rowCount() <=> 1) {
-            $this->registrationResult =  false;
+            $this->result =  false;
+            $this->resultMessage = RegisterAttemptStatus::FAILED_EMAIL_SEND;
         }
     }
 }

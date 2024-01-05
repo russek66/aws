@@ -16,8 +16,8 @@ class RegisterValidateExistence
     public function __construct(
         private readonly mixed $object,
         private readonly DatabaseFactory $database = new DatabaseFactory(),
-        private bool $validationResult = true,
-        private mixed $validationResultMessage = RegisterAttemptStatus::SUCCESS
+        private bool $result = true,
+        private mixed $resultMessage = RegisterAttemptStatus::SUCCESS
     )
     {
 
@@ -44,7 +44,7 @@ class RegisterValidateExistence
         );
 
         $query?->fetch();
-        $this->validationResultMessage = RegisterAttemptStatus::FAILED_USER_EXIST;
+        $this->resultMessage = RegisterAttemptStatus::FAILED_USER_EXIST;
 
         return true;
     }
@@ -70,7 +70,7 @@ class RegisterValidateExistence
         );
 
         $query?->fetch();
-        $this->validationResultMessage = RegisterAttemptStatus::FAILED_EMAIL_EXIST;
+        $this->resultMessage = RegisterAttemptStatus::FAILED_EMAIL_EXIST;
 
         return true;
     }
@@ -78,29 +78,8 @@ class RegisterValidateExistence
     public function validateExistence(): RegisterValidateExistence
     {
         if ($this->validateNameExistence() OR $this->validateEmailExistence()) {
-            $this->validationResult = false;
+            $this->result = false;
         }
         return $this;
-    }
-
-    public function getValidationResult(): bool
-    {
-        return $this->validationResult;
-    }
-
-    public function getValidationMessage(): array
-    {
-        if($this->validationResultMessage === RegisterAttemptStatus::SUCCESS) {
-            $msg = [
-                'status'    => RegisterAttemptStatus::SUCCESS->name,
-                'msg'       => $this->getText('registration',  RegisterAttemptStatus::SUCCESS->value)
-            ];
-        } else {
-            $msg = [
-                'status'    => RegisterAttemptStatus::FAILED->name,
-                'msg'       => $this->getText('registration',  $this->validationResultMessage->value)
-            ];
-        }
-        return $msg;
     }
 }

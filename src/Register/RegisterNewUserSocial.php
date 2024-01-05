@@ -3,6 +3,7 @@
 namespace App\Register;
 
 use App\Core\DatabaseFactory;
+use App\Enum\RegisterAttemptStatus;
 use App\Register\Helper\PasswordHash;
 use DateTime;
 
@@ -16,6 +17,8 @@ class RegisterNewUserSocial implements NewUserInterface
         private readonly string $provider,
         private ?array $hashArray = null,
         public bool $registrationResult = true,
+        private bool $result = true,
+        private mixed $resultMessage = RegisterAttemptStatus::SUCCESS,
         private readonly DatabaseFactory $database = new DatabaseFactory()
     )
     {
@@ -60,7 +63,8 @@ class RegisterNewUserSocial implements NewUserInterface
         ]);
 
         if ($query->rowCount() <=> 1) {
-            $this->registrationResult = false;
+            $this->result =  false;
+            $this->resultMessage = RegisterAttemptStatus::FAILED_EMAIL_SEND;
         }
     }
 }
