@@ -14,7 +14,7 @@ class RegisterValidateExistence
     }
 
     public function __construct(
-        private readonly mixed $object,
+        private readonly mixed $RDTO,
         private readonly DatabaseFactory $database = new DatabaseFactory(),
         private bool $result = true,
         private mixed $resultMessage = RegisterAttemptStatus::SUCCESS
@@ -39,7 +39,7 @@ class RegisterValidateExistence
             ?->prepare($sql);
 
         $query?->execute(array(
-                ':user_name' => $this->object->userName
+                ':user_name' => $this->RDTO->userName
             )
         );
 
@@ -65,7 +65,7 @@ class RegisterValidateExistence
             ?->prepare($sql);
 
         $query?->execute(array(
-                ':user_email' => $this->object->userEmail
+                ':user_email' => $this->RDTO->userEmail
             )
         );
 

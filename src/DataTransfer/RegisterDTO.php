@@ -4,6 +4,7 @@ namespace App\DataTransfer;
 
 final readonly class RegisterDTO
 {
+
     public function __construct
     (
         public ?string $userName,
@@ -11,10 +12,9 @@ final readonly class RegisterDTO
         public ?string $userPasswordRepeat,
         public ?string $userEmail,
         public ?string $userEmailRepeat,
+        public ?string $userActivationHash
     )
     {
     }
-
-
 
 }

@@ -1,11 +1,14 @@
 <?php
 
 use App\Http\Controllers\Controller;
+use App\Register\Helper\PasswordHash;
 use App\Register\Register;
 use App\DataTransfer\RegisterDTO;
 
 class RegisterController extends Controller
 {
+
+    use PasswordHash;
 
     public function __construct
     (
@@ -23,14 +26,15 @@ class RegisterController extends Controller
     {
         $registerDTO = new RegisterDTO(
             $_POST['user_name'],
-            $_POST['user_password'],
-            $_POST['user_password_repeat'],
+            $this->generateHash($_POST['user_password']),
+            $this->generateHash($_POST['user_password_repeat']),
             $_POST['user_email'],
-            $_POST['user_email_repeat']
+            $_POST['user_email_repeat'],
+            $this->generateActivationHash()
         );
         $this->view->render(
             'register/response',
-            (new Register(object: $registerDTO))->response
+            (new Register(RDTO: $registerDTO))->response
         );
     }
 }

@@ -14,11 +14,11 @@ class Register
     use GetResult;
 
     public function __construct(
-        private RegisterDTO $object,
+        private RegisterDTO $RDTO,
         public mixed $response = null
     )
     {
-        $this->object = $this->doFilterData(object: $this->object);
+        $this->RDTO = $this->doFilterData(object: $this->RDTO);
         $this->doRegister();
     }
 
@@ -32,7 +32,7 @@ class Register
 
     private function validateData(): bool
     {
-        $validation = (new RegisterValidateData($this->object));
+        $validation = (new RegisterValidateData(RDTO: $this->RDTO));
         $validation->validateData();
 
         $this->setResponseCode($validation);
@@ -44,7 +44,7 @@ class Register
 
     private function doesUserExist(): bool
     {
-        $validation = (new RegisterValidateExistence(object: $this->object));
+        $validation = (new RegisterValidateExistence(RDTO: $this->RDTO));
         $validation->validateExistence();
 
         $this->setResponseCode($validation);
@@ -56,7 +56,7 @@ class Register
 
     private function registerUserInDatabase(): Register
     {
-        $registration = (new RegisterNewUser(data: $this->object));
+        $registration = (new RegisterNewUser(RDTO: $this->RDTO));
 
         $this->setResponseCode($registration);
         $this->setParams($registration);
@@ -67,7 +67,7 @@ class Register
 
     private function sendActivationEmail(): Register
     {
-        $activationEmail = (new Email());
+        $activationEmail = (new Email(RDTO: $this->RDTO));
 
         $this->setResponseCode($activationEmail);
         $this->setParams($activationEmail);
