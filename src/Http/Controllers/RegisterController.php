@@ -26,8 +26,8 @@ class RegisterController extends Controller
     {
         $registerDTO = new RegisterDTO(
             $_POST['user_name'],
-            $this->generateHash($_POST['user_password']),
-            $this->generateHash($_POST['user_password_repeat']),
+            $_POST['user_password'],
+            $_POST['user_password_repeat'],
             $_POST['user_email'],
             $_POST['user_email_repeat'],
             $this->generateActivationHash()

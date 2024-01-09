@@ -2,8 +2,6 @@
 
 namespace App\Email;
 
-use App\DataTransfer\RegisterDTO;
-use App\Enum\RegisterAttemptStatus;
 use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\PHPMailer;
 
@@ -11,17 +9,15 @@ class Email
 {
 
     public function __construct(
-        private readonly RegisterDTO $RDTO,
+        private PHPMailer $mail,
         private bool $result = true,
-        private mixed $resultMessage = RegisterAttemptStatus::SUCCESS,
-        private PHPMailer $mail
+        private mixed $resultMessage = 'SUCCESS',
     )
     {
         $this->mail = new PHPMailer();
-
     }
     
-    public function sendActivationEmail(string $email, string $activationHash)
+    public function sendActivationEmail(string $email, string $activationHash): void
     {
         try {
             $this->mail->setFrom('from@example.com', 'First Last');
@@ -33,14 +29,14 @@ class Email
             $this->mail->addAttachment('images/phpmailer_mini.png');
 
             if (!$this->mail->send()) {
-                echo 'Mailer Error: ' . $this->mail->ErrorInfo;
+                $this->result = false;
+                $this->resultMessage = $this->mail->ErrorInfo;
             } else {
                 echo 'Message sent!';
             }
         } catch (Exception $e) {
             echo $e->errorMessage();
         }
-
     }
 
 }

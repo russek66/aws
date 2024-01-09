@@ -48,7 +48,7 @@ class RegisterNewUser implements NewUserInterface
 
         $query->execute([
             ':user_name' => $this->RDTO->userName,
-            ':user_password_hash' => $this->RDTO->userPassword,
+            ':user_password_hash' => $this->generateHash($this->RDTO->userPassword),
             ':user_email' => $this->RDTO->userEmail,
             ':user_creation_timestamp' => time(),
             ':user_activation_hash' =>  $this->RDTO->userActivationHash,
